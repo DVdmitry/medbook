@@ -68,6 +68,7 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="John"
+            data-ai-label="Patient first name"
           />
         </div>
 
@@ -79,6 +80,7 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="Doe"
+            data-ai-label="Patient last name"
           />
         </div>
       </div>
@@ -92,6 +94,7 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="john.doe@example.com"
+            data-ai-label="Patient email address"
           />
         </div>
 
@@ -103,6 +106,7 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="+1 (555) 123-4567"
+            data-ai-label="Patient phone number"
           />
         </div>
       </div>
@@ -115,12 +119,14 @@ function handleSubmit() {
             type="date"
             required
             class="form-input"
+            data-ai-private
+            data-ai-label="Patient date of birth"
           />
         </div>
 
         <div>
           <label class="form-label">Gender *</label>
-          <select v-model="formData.gender" required class="form-input">
+          <select v-model="formData.gender" required class="form-input" data-ai-private data-ai-label="Patient gender">
             <option value="">Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -137,11 +143,12 @@ function handleSubmit() {
           required
           class="form-input"
           placeholder="123 Main St, City, State, ZIP"
+          data-ai-label="Patient address"
         />
       </div>
 
-      <div class="border-t pt-4 mt-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Emergency Contact</h3>
+      <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Emergency Contact</h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -152,6 +159,7 @@ function handleSubmit() {
               required
               class="form-input"
               placeholder="Jane Doe"
+              data-ai-label="Emergency contact full name"
             />
           </div>
 
@@ -163,6 +171,7 @@ function handleSubmit() {
               required
               class="form-input"
               placeholder="+1 (555) 987-6543"
+              data-ai-label="Emergency contact phone number"
             />
           </div>
         </div>
