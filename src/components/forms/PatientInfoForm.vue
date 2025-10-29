@@ -68,7 +68,6 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="John"
-            data-ai-label="Patient first name"
           />
         </div>
 
@@ -80,7 +79,6 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="Doe"
-            data-ai-label="Patient last name"
           />
         </div>
       </div>
@@ -94,7 +92,6 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="john.doe@example.com"
-            data-ai-label="Patient email address"
           />
         </div>
 
@@ -106,7 +103,6 @@ function handleSubmit() {
             required
             class="form-input"
             placeholder="+1 (555) 123-4567"
-            data-ai-label="Patient phone number"
           />
         </div>
       </div>
@@ -119,14 +115,12 @@ function handleSubmit() {
             type="date"
             required
             class="form-input"
-            data-ai-private
-            data-ai-label="Patient date of birth"
           />
         </div>
 
         <div>
           <label class="form-label">Gender *</label>
-          <select v-model="formData.gender" required class="form-input" data-ai-private data-ai-label="Patient gender">
+          <select v-model="formData.gender" required class="form-input">
             <option value="">Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -143,7 +137,6 @@ function handleSubmit() {
           required
           class="form-input"
           placeholder="123 Main St, City, State, ZIP"
-          data-ai-label="Patient address"
         />
       </div>
 
@@ -159,7 +152,6 @@ function handleSubmit() {
               required
               class="form-input"
               placeholder="Jane Doe"
-              data-ai-label="Emergency contact full name"
             />
           </div>
 
@@ -171,7 +163,6 @@ function handleSubmit() {
               required
               class="form-input"
               placeholder="+1 (555) 987-6543"
-              data-ai-label="Emergency contact phone number"
             />
           </div>
         </div>
