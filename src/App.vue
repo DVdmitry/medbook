@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import { useTheme } from '@/composables/useTheme';
-import { SunIcon, MoonIcon, HeartPulseIcon } from '@heroicons/vue/24/outline';
+import { SunIcon, MoonIcon, HeartIcon } from '@heroicons/vue/24/outline';
 
 const { isDark, toggleTheme } = useTheme();
 </script>
@@ -20,7 +20,7 @@ const { isDark, toggleTheme } = useTheme();
         <div class="flex items-center justify-between">
           <router-link to="/" class="flex items-center space-x-3 group">
             <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
-              <HeartPulseIcon class="w-7 h-7 text-white" />
+              <HeartIcon class="w-7 h-7 text-white" />
             </div>
             <span class="text-2xl font-bold gradient-text">MedBook</span>
           </router-link>
@@ -55,7 +55,7 @@ const { isDark, toggleTheme } = useTheme();
         <div class="text-center">
           <div class="flex items-center justify-center space-x-3 mb-4">
             <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
-              <HeartPulseIcon class="w-6 h-6 text-white" />
+              <HeartIcon class="w-6 h-6 text-white" />
             </div>
             <span class="text-2xl font-bold text-white">MedBook</span>
           </div>
