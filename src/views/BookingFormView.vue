@@ -81,6 +81,18 @@ function handleConfirm() {
       </div>
 
       <div v-else>
+        <!-- Doctor Info Card - Always visible -->
+        <div class="mb-6 bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-800">
+          <div class="flex items-center space-x-4">
+            <img :src="doctor.avatar" :alt="doctor.name" class="w-16 h-16 rounded-lg" />
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ doctor.name }}</h3>
+              <p class="text-sky-600 dark:text-sky-400 font-medium">{{ doctor.specialtyLabel }}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ doctor.experience }} years experience • ${{ doctor.consultationFee }} consultation</p>
+            </div>
+          </div>
+        </div>
+
         <!-- Progress Bar -->
         <div class="mb-10 bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-800">
           <div class="flex justify-between mb-3">

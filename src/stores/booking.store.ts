@@ -56,6 +56,23 @@ export const useBookingStore = defineStore('booking', () => {
 
   // Actions
   function setDoctor(doctor: Doctor) {
+    // If selecting a different doctor, reset all form data
+    if (selectedDoctor.value && selectedDoctor.value.id !== doctor.id) {
+      currentStep.value = 'patient-info';
+      patientInfo.value = {};
+      medicalHistory.value = {
+        allergies: '',
+        chronicConditions: '',
+        currentMedications: '',
+        previousSurgeries: '',
+        familyHistory: ''
+      };
+      specialtyFormData.value = {};
+      appointmentDate.value = '';
+      appointmentTime.value = '';
+      appointmentReason.value = '';
+      appointmentNotes.value = '';
+    }
     selectedDoctor.value = doctor;
   }
 

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nFix form bugs and improve UX\n\n- Fix date input clearing issue in PatientInfoForm by removing empty object reset\n- Replace dropdown date/time selectors with native date/time inputs for better UX\n- Fix form data persistence bug: clear all data when switching doctors\n- Add persistent doctor info card above booking steps for better context\n- Add AI Form Copilot integration documentation\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

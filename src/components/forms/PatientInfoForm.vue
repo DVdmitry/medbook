@@ -26,8 +26,6 @@ const defaultData: BasePatientInfo = {
 watch(fillWithDefaults, (shouldFill) => {
   if (shouldFill) {
     formData.value = { ...defaultData };
-  } else {
-    formData.value = {};
   }
 });
 

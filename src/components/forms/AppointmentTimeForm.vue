@@ -13,36 +13,21 @@ const fillWithDefaults = ref(false);
 
 const doctor = computed(() => bookingStore.selectedDoctor);
 
-// Generate available dates (next 14 days)
-const availableDates = computed(() => {
-  const dates = [];
-  const today = new Date();
-  for (let i = 1; i <= 14; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    dates.push(date.toISOString().split('T')[0]);
-  }
-  return dates;
+// Minimum date (tomorrow)
+const minDate = computed(() => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split('T')[0];
 });
 
-// Time slots
-const timeSlots = [
-  '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
-  '11:00', '11:30', '13:00', '13:30', '14:00', '14:30',
-  '15:00', '15:30', '16:00', '16:30', '17:00'
-];
-
 watch(fillWithDefaults, (shouldFill) => {
-  if (shouldFill && availableDates.value.length > 0) {
-    selectedDate.value = availableDates.value[2]; // 3rd available date
+  if (shouldFill) {
+    const defaultDate = new Date();
+    defaultDate.setDate(defaultDate.getDate() + 3);
+    selectedDate.value = defaultDate.toISOString().split('T')[0];
     selectedTime.value = '10:00';
     reason.value = 'Annual checkup';
     notes.value = 'Please review my recent lab results.';
-  } else if (!shouldFill) {
-    selectedDate.value = '';
-    selectedTime.value = '';
-    reason.value = '';
-    notes.value = '';
   }
 });
 
@@ -97,33 +82,24 @@ function handleSubmit() {
       <!-- Date Selection -->
       <div>
         <label class="form-label">Select Date *</label>
-        <select v-model="selectedDate" required class="form-input">
-          <option value="">Choose a date</option>
-          <option v-for="date in availableDates" :key="date" :value="date">
-            {{ new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
-          </option>
-        </select>
+        <input
+          v-model="selectedDate"
+          type="date"
+          :min="minDate"
+          required
+          class="form-input"
+        />
       </div>
 
       <!-- Time Selection -->
-      <div v-if="selectedDate">
+      <div>
         <label class="form-label">Select Time *</label>
-        <div class="grid grid-cols-4 md:grid-cols-6 gap-2">
-          <button
-            v-for="time in timeSlots"
-            :key="time"
-            type="button"
-            @click="selectedTime = time"
-            :class="[
-              'px-4 py-2 rounded-lg border-2 transition-colors font-medium',
-              selectedTime === time
-                ? 'border-sky-600 dark:border-sky-500 bg-sky-600 dark:bg-sky-500 text-white'
-                : 'border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:border-sky-500 dark:hover:border-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/20'
-            ]"
-          >
-            {{ time }}
-          </button>
-        </div>
+        <input
+          v-model="selectedTime"
+          type="time"
+          required
+          class="form-input"
+        />
       </div>
 
       <!-- Reason -->
