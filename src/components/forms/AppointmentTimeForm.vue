@@ -9,6 +9,8 @@ const selectedTime = ref(bookingStore.appointmentTime || '');
 const reason = ref(bookingStore.appointmentReason || '');
 const notes = ref(bookingStore.appointmentNotes || '');
 
+const fillWithDefaults = ref(false);
+
 const doctor = computed(() => bookingStore.selectedDoctor);
 
 // Generate available dates (next 14 days)
@@ -29,6 +31,20 @@ const timeSlots = [
   '11:00', '11:30', '13:00', '13:30', '14:00', '14:30',
   '15:00', '15:30', '16:00', '16:30', '17:00'
 ];
+
+watch(fillWithDefaults, (shouldFill) => {
+  if (shouldFill && availableDates.value.length > 0) {
+    selectedDate.value = availableDates.value[2]; // 3rd available date
+    selectedTime.value = '10:00';
+    reason.value = 'Annual checkup';
+    notes.value = 'Please review my recent lab results.';
+  } else if (!shouldFill) {
+    selectedDate.value = '';
+    selectedTime.value = '';
+    reason.value = '';
+    notes.value = '';
+  }
+});
 
 watch([selectedDate, selectedTime], ([date, time]) => {
   if (date && time) {
@@ -54,15 +70,25 @@ function handleSubmit() {
 
 <template>
   <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Select Appointment Time</h2>
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Select Appointment Time</h2>
+      <label class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+        <input
+          v-model="fillWithDefaults"
+          type="checkbox"
+          class="w-4 h-4 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2"
+        />
+        <span>Fill with default data</span>
+      </label>
+    </div>
 
-    <div v-if="doctor" class="card bg-primary-50 border border-primary-200">
+    <div v-if="doctor" class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 rounded-lg p-5">
       <div class="flex items-center space-x-4">
-        <img :src="doctor.avatar" :alt="doctor.name" class="w-16 h-16 rounded-full" />
+        <img :src="doctor.avatar" :alt="doctor.name" class="w-16 h-16 rounded-lg" />
         <div>
-          <h3 class="text-lg font-bold text-gray-900">{{ doctor.name }}</h3>
-          <p class="text-primary-700">{{ doctor.specialtyLabel }}</p>
-          <p class="text-sm text-gray-600">Consultation Fee: ${{ doctor.consultationFee }}</p>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ doctor.name }}</h3>
+          <p class="text-sky-600 dark:text-sky-400 font-medium">{{ doctor.specialtyLabel }}</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Consultation Fee: ${{ doctor.consultationFee }}</p>
         </div>
       </div>
     </div>
@@ -89,10 +115,10 @@ function handleSubmit() {
             type="button"
             @click="selectedTime = time"
             :class="[
-              'px-4 py-2 rounded-lg border-2 transition-all font-medium',
+              'px-4 py-2 rounded-lg border-2 transition-colors font-medium',
               selectedTime === time
-                ? 'border-primary-600 bg-primary-600 text-white'
-                : 'border-gray-300 hover:border-primary-400 hover:bg-primary-50'
+                ? 'border-sky-600 dark:border-sky-500 bg-sky-600 dark:bg-sky-500 text-white'
+                : 'border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:border-sky-500 dark:hover:border-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/20'
             ]"
           >
             {{ time }}

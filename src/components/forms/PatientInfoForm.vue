@@ -9,6 +9,28 @@ const formData = ref<Partial<BasePatientInfo>>({
   ...bookingStore.patientInfo
 });
 
+const fillWithDefaults = ref(false);
+
+const defaultData: BasePatientInfo = {
+  firstName: 'John',
+  lastName: 'Smith',
+  email: 'john.smith@example.com',
+  phone: '+1 (555) 123-4567',
+  dateOfBirth: '1985-06-15',
+  gender: 'male',
+  address: '123 Main Street, New York, NY 10001',
+  emergencyContact: 'Jane Smith',
+  emergencyPhone: '+1 (555) 987-6543'
+};
+
+watch(fillWithDefaults, (shouldFill) => {
+  if (shouldFill) {
+    formData.value = { ...defaultData };
+  } else {
+    formData.value = {};
+  }
+});
+
 watch(formData, (newData) => {
   bookingStore.setPatientInfo(newData);
 }, { deep: true });
@@ -24,7 +46,17 @@ function handleSubmit() {
 
 <template>
   <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Personal Information</h2>
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h2>
+      <label class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+        <input
+          v-model="fillWithDefaults"
+          type="checkbox"
+          class="w-4 h-4 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2"
+        />
+        <span>Fill with default data</span>
+      </label>
+    </div>
 
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

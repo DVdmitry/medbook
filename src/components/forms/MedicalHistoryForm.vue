@@ -16,6 +16,36 @@ const formData = ref<Partial<MedicalHistory>>({
   alcoholConsumption: bookingStore.medicalHistory.alcoholConsumption || 'none'
 });
 
+const fillWithDefaults = ref(false);
+
+const defaultData: MedicalHistory = {
+  allergies: ['Penicillin', 'Peanuts'],
+  chronicConditions: ['Hypertension'],
+  currentMedications: ['Lisinopril 10mg daily', 'Aspirin 81mg daily'],
+  previousSurgeries: ['Appendectomy (2015)'],
+  familyHistory: ['Father - Heart Disease', 'Mother - Diabetes Type 2'],
+  bloodType: 'A+',
+  smokingStatus: 'never',
+  alcoholConsumption: 'occasional'
+};
+
+watch(fillWithDefaults, (shouldFill) => {
+  if (shouldFill) {
+    formData.value = { ...defaultData };
+  } else {
+    formData.value = {
+      allergies: [],
+      chronicConditions: [],
+      currentMedications: [],
+      previousSurgeries: [],
+      familyHistory: [],
+      bloodType: '',
+      smokingStatus: 'never',
+      alcoholConsumption: 'none'
+    };
+  }
+});
+
 const newAllergy = ref('');
 const newCondition = ref('');
 const newMedication = ref('');
@@ -49,7 +79,17 @@ function handleSubmit() {
 
 <template>
   <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Medical History</h2>
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Medical History</h2>
+      <label class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+        <input
+          v-model="fillWithDefaults"
+          type="checkbox"
+          class="w-4 h-4 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2"
+        />
+        <span>Fill with default data</span>
+      </label>
+    </div>
 
     <form @submit.prevent="handleSubmit" class="space-y-6">
       <!-- Allergies -->

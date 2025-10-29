@@ -15,6 +15,35 @@ const formData = ref<Partial<CardiologyForm>>({
   ...bookingStore.specialtyFormData
 });
 
+const fillWithDefaults = ref(false);
+
+const defaultData: CardiologyForm = {
+  chestPain: true,
+  chestPainDetails: 'Occasional tightness in chest during physical activity',
+  shortnessOfBreath: true,
+  palpitations: false,
+  highBloodPressure: true,
+  currentBloodPressure: '145/92',
+  cholesterolLevel: '235 mg/dL',
+  heartDiseaseFamilyHistory: true,
+  exerciseFrequency: '1-2-weekly'
+};
+
+watch(fillWithDefaults, (shouldFill) => {
+  if (shouldFill) {
+    formData.value = { ...defaultData };
+  } else {
+    formData.value = {
+      chestPain: false,
+      shortnessOfBreath: false,
+      palpitations: false,
+      highBloodPressure: false,
+      heartDiseaseFamilyHistory: false,
+      exerciseFrequency: ''
+    };
+  }
+});
+
 watch(formData, (newData) => {
   bookingStore.setSpecialtyFormData(newData);
 }, { deep: true });
@@ -27,15 +56,27 @@ const emit = defineEmits<{
 
 <template>
   <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Cardiology Assessment</h2>
-    <p class="text-gray-600 mb-6">Please answer the following questions about your cardiovascular health.</p>
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Cardiology Assessment</h2>
+        <p class="text-gray-600 dark:text-gray-400 mt-1">Please answer the following questions about your cardiovascular health.</p>
+      </div>
+      <label class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+        <input
+          v-model="fillWithDefaults"
+          type="checkbox"
+          class="w-4 h-4 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2"
+        />
+        <span>Fill with default data</span>
+      </label>
+    </div>
 
     <form @submit.prevent="emit('submit')" class="space-y-6">
       <!-- Chest Pain -->
-      <div class="card bg-gray-50">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
         <label class="flex items-center space-x-3 cursor-pointer">
-          <input v-model="formData.chestPain" type="checkbox" class="w-5 h-5 text-primary-600" />
-          <span class="font-medium text-gray-900">I experience chest pain or discomfort</span>
+          <input v-model="formData.chestPain" type="checkbox" class="w-5 h-5 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2" />
+          <span class="font-medium text-gray-900 dark:text-white">I experience chest pain or discomfort</span>
         </label>
 
         <div v-if="formData.chestPain" class="mt-4">
@@ -50,26 +91,26 @@ const emit = defineEmits<{
       </div>
 
       <!-- Shortness of Breath -->
-      <div class="card bg-gray-50">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
         <label class="flex items-center space-x-3 cursor-pointer">
-          <input v-model="formData.shortnessOfBreath" type="checkbox" class="w-5 h-5 text-primary-600" />
-          <span class="font-medium text-gray-900">I experience shortness of breath</span>
+          <input v-model="formData.shortnessOfBreath" type="checkbox" class="w-5 h-5 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2" />
+          <span class="font-medium text-gray-900 dark:text-white">I experience shortness of breath</span>
         </label>
       </div>
 
       <!-- Palpitations -->
-      <div class="card bg-gray-50">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
         <label class="flex items-center space-x-3 cursor-pointer">
-          <input v-model="formData.palpitations" type="checkbox" class="w-5 h-5 text-primary-600" />
-          <span class="font-medium text-gray-900">I experience heart palpitations or irregular heartbeat</span>
+          <input v-model="formData.palpitations" type="checkbox" class="w-5 h-5 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2" />
+          <span class="font-medium text-gray-900 dark:text-white">I experience heart palpitations or irregular heartbeat</span>
         </label>
       </div>
 
       <!-- High Blood Pressure -->
-      <div class="card bg-gray-50">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
         <label class="flex items-center space-x-3 cursor-pointer">
-          <input v-model="formData.highBloodPressure" type="checkbox" class="w-5 h-5 text-primary-600" />
-          <span class="font-medium text-gray-900">I have high blood pressure</span>
+          <input v-model="formData.highBloodPressure" type="checkbox" class="w-5 h-5 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2" />
+          <span class="font-medium text-gray-900 dark:text-white">I have high blood pressure</span>
         </label>
 
         <div v-if="formData.highBloodPressure" class="mt-4 grid grid-cols-2 gap-4">
@@ -95,10 +136,10 @@ const emit = defineEmits<{
       </div>
 
       <!-- Family History -->
-      <div class="card bg-gray-50">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
         <label class="flex items-center space-x-3 cursor-pointer">
-          <input v-model="formData.heartDiseaseFamilyHistory" type="checkbox" class="w-5 h-5 text-primary-600" />
-          <span class="font-medium text-gray-900">Family history of heart disease</span>
+          <input v-model="formData.heartDiseaseFamilyHistory" type="checkbox" class="w-5 h-5 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2" />
+          <span class="font-medium text-gray-900 dark:text-white">Family history of heart disease</span>
         </label>
       </div>
 

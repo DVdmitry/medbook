@@ -30,54 +30,33 @@
     @apply hover:bg-white/80 hover:dark:bg-gray-900/80 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer;
   }
 
-  /* Modern Button Primary */
+  /* Button Primary - Minimalist */
   .btn-primary {
-    @apply relative overflow-hidden text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-2xl;
-    @apply transition-all duration-300 hover:scale-105 active:scale-95;
-    background: linear-gradient(to right, #0284c7, #c026d3);
+    @apply bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600;
+    @apply text-white font-semibold py-3 px-6 rounded-lg;
+    @apply transition-colors duration-200;
   }
 
-  .btn-primary:hover {
-    background: linear-gradient(to right, #0ea5e9, #d946ef);
-  }
-
-  .dark .btn-primary {
-    background: linear-gradient(to right, #0ea5e9, #d946ef);
-  }
-
-  .dark .btn-primary:hover {
-    background: linear-gradient(to right, #38bdf8, #e879f9);
-  }
-
-  .btn-primary::before {
-    content: '';
-    @apply absolute inset-0 bg-white/20 translate-y-full transition-transform duration-300;
-  }
-
-  .btn-primary:hover::before {
-    @apply translate-y-0;
-  }
-
-  /* Modern Button Secondary */
+  /* Button Secondary - Minimalist */
   .btn-secondary {
-    @apply backdrop-blur-xl bg-gray-200/80 dark:bg-gray-800/80 hover:bg-gray-300/80 dark:hover:bg-gray-700/80;
-    @apply text-gray-800 dark:text-gray-200 font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-lg;
-    @apply border border-gray-300/50 dark:border-gray-700/50;
-    @apply transition-all duration-300 hover:scale-105 active:scale-95;
+    @apply bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700;
+    @apply text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-lg;
+    @apply border border-gray-300 dark:border-gray-600;
+    @apply transition-colors duration-200;
   }
 
-  /* Modern Form Input */
+  /* Form Input - Minimalist */
   .form-input {
-    @apply w-full px-4 py-3 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-xl;
-    @apply border border-gray-300/50 dark:border-gray-700/50;
-    @apply focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent;
-    @apply text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400;
-    @apply transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply w-full px-4 py-3 bg-white dark:bg-gray-900 rounded-lg;
+    @apply border border-gray-300 dark:border-gray-700;
+    @apply focus:ring-2 focus:ring-sky-500 focus:border-transparent;
+    @apply text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400;
+    @apply transition-all duration-200;
   }
 
-  /* Form Label */
+  /* Form Label - Minimalist */
   .form-label {
-    @apply block text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2;
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
   }
 
   /* Card with modern styling */
