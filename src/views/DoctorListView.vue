@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { doctors, specialtyDescriptions } from '@/data/doctors';
 import type { Specialty } from '@/types/medical.types';
 import {
@@ -14,8 +14,17 @@ import {
 import { StarIcon as StarIconSolid } from '@heroicons/vue/24/solid';
 
 const router = useRouter();
+const route = useRoute();
 const selectedSpecialty = ref<Specialty | 'all'>('all');
 const searchQuery = ref('');
+
+// Check for specialty query parameter on mount
+onMounted(() => {
+  const specialtyParam = route.query.specialty as string;
+  if (specialtyParam && specialtyParam !== 'all') {
+    selectedSpecialty.value = specialtyParam as Specialty;
+  }
+});
 
 const specialties: Array<{ value: Specialty | 'all'; label: string }> = [
   { value: 'all', label: 'All Specialties' },

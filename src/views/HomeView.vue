@@ -33,14 +33,18 @@ const features = [
 ];
 
 const specialties = [
-  { name: 'Cardiology' },
-  { name: 'Dermatology' },
-  { name: 'General Practice' },
-  { name: 'Orthopedic Surgery' },
-  { name: 'Neurology' },
-  { name: 'Gastroenterology' },
-  { name: 'Pediatrics' }
+  { name: 'Cardiology', value: 'cardiologist' },
+  { name: 'Dermatology', value: 'dermatologist' },
+  { name: 'General Practice', value: 'general-practitioner' },
+  { name: 'Orthopedic Surgery', value: 'orthopedic-surgeon' },
+  { name: 'Neurology', value: 'neurologist' },
+  { name: 'Gastroenterology', value: 'gastroenterologist' },
+  { name: 'Pediatrics', value: 'pediatrician' }
 ];
+
+function goToSpecialty(specialtyValue: string) {
+  router.push({ path: '/doctors', query: { specialty: specialtyValue } });
+}
 </script>
 
 <template>
@@ -109,13 +113,14 @@ const specialties = [
         </div>
 
         <div class="flex flex-wrap justify-center gap-3 mb-12">
-          <div
+          <button
             v-for="specialty in specialties"
             :key="specialty.name"
-            class="px-5 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-sky-500 dark:hover:border-sky-500 transition-colors duration-200"
+            @click="goToSpecialty(specialty.value)"
+            class="px-5 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-sky-500 dark:hover:border-sky-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 font-medium text-gray-900 dark:text-white cursor-pointer"
           >
-            <span class="font-medium text-gray-900 dark:text-white">{{ specialty.name }}</span>
-          </div>
+            {{ specialty.name }}
+          </button>
         </div>
 
         <div class="text-center">
