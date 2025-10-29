@@ -32,10 +32,21 @@
 
   /* Modern Button Primary */
   .btn-primary {
-    @apply relative overflow-hidden bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500;
-    @apply dark:from-primary-500 dark:to-accent-500 dark:hover:from-primary-400 dark:hover:to-accent-400;
-    @apply text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-2xl;
+    @apply relative overflow-hidden text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-2xl;
     @apply transition-all duration-300 hover:scale-105 active:scale-95;
+    background: linear-gradient(to right, #0284c7, #c026d3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(to right, #0ea5e9, #d946ef);
+  }
+
+  .dark .btn-primary {
+    background: linear-gradient(to right, #0ea5e9, #d946ef);
+  }
+
+  .dark .btn-primary:hover {
+    background: linear-gradient(to right, #38bdf8, #e879f9);
   }
 
   .btn-primary::before {
@@ -76,8 +87,12 @@
 
   /* Gradient Text */
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-600 to-accent-600 dark:from-primary-400 dark:to-accent-400;
     @apply bg-clip-text text-transparent font-bold;
+    background: linear-gradient(to right, #0284c7, #c026d3);
+  }
+
+  .dark .gradient-text {
+    background: linear-gradient(to right, #38bdf8, #e879f9);
   }
 
   /* Floating Animation */
@@ -87,10 +102,13 @@
 
   /* Hero Section Gradient */
   .hero-gradient {
-    @apply bg-gradient-to-br from-primary-600 via-accent-600 to-primary-800;
-    @apply dark:from-primary-500 dark:via-accent-500 dark:to-primary-900;
+    background: linear-gradient(to bottom right, #0284c7, #c026d3, #075985);
     position: relative;
     overflow: hidden;
+  }
+
+  .dark .hero-gradient {
+    background: linear-gradient(to bottom right, #0ea5e9, #d946ef, #0c4a6e);
   }
 
   .hero-gradient::before {
@@ -115,14 +133,27 @@
 
   /* Progress Bar */
   .progress-bar {
-    @apply h-2 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full;
-    @apply shadow-lg shadow-primary-500/50 dark:shadow-primary-400/50;
+    @apply h-2 rounded-full shadow-lg;
+    background: linear-gradient(to right, #0ea5e9, #d946ef);
+    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.5);
     transition: width 0.3s ease-out;
+  }
+
+  .dark .progress-bar {
+    box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.5);
   }
 
   /* Badge with glassmorphism */
   .badge-glass {
-    @apply backdrop-blur-xl bg-primary-500/20 dark:bg-primary-400/20 text-primary-700 dark:text-primary-300;
-    @apply px-4 py-2 rounded-full text-sm font-semibold border border-primary-500/30 dark:border-primary-400/30;
+    @apply backdrop-blur-xl px-4 py-2 rounded-full text-sm font-semibold;
+    background-color: rgba(14, 165, 233, 0.2);
+    color: #0369a1;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+  }
+
+  .dark .badge-glass {
+    background-color: rgba(56, 189, 248, 0.2);
+    color: #7dd3fc;
+    border-color: rgba(56, 189, 248, 0.3);
   }
 }
