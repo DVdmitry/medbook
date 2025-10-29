@@ -32,9 +32,12 @@
 
   /* Button Primary - Minimalist */
   .btn-primary {
-    @apply bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600;
-    @apply text-white font-semibold py-3 px-6 rounded-lg;
+    @apply bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-6 rounded-lg;
     @apply transition-colors duration-200;
+  }
+
+  .dark .btn-primary {
+    @apply bg-sky-700 hover:bg-sky-600;
   }
 
   /* Button Secondary - Minimalist */

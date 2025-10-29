@@ -15,11 +15,11 @@ export const useBookingStore = defineStore('booking', () => {
   const currentStep = ref<BookingStep>('patient-info');
   const patientInfo = ref<Partial<BasePatientInfo>>({});
   const medicalHistory = ref<Partial<MedicalHistory>>({
-    allergies: [],
-    chronicConditions: [],
-    currentMedications: [],
-    previousSurgeries: [],
-    familyHistory: []
+    allergies: '',
+    chronicConditions: '',
+    currentMedications: '',
+    previousSurgeries: '',
+    familyHistory: ''
   });
   const specialtyFormData = ref<Partial<SpecialtyFormData>>({});
   const appointmentDate = ref<string>('');
@@ -102,11 +102,11 @@ export const useBookingStore = defineStore('booking', () => {
     currentStep.value = 'patient-info';
     patientInfo.value = {};
     medicalHistory.value = {
-      allergies: [],
-      chronicConditions: [],
-      currentMedications: [],
-      previousSurgeries: [],
-      familyHistory: []
+      allergies: '',
+      chronicConditions: '',
+      currentMedications: '',
+      previousSurgeries: '',
+      familyHistory: ''
     };
     specialtyFormData.value = {};
     appointmentDate.value = '';

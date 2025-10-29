@@ -35,11 +35,11 @@ export interface BasePatientInfo {
 }
 
 export interface MedicalHistory {
-  allergies: string[];
-  chronicConditions: string[];
-  currentMedications: string[];
-  previousSurgeries: string[];
-  familyHistory: string[];
+  allergies: string;
+  chronicConditions: string;
+  currentMedications: string;
+  previousSurgeries: string;
+  familyHistory: string;
   bloodType?: string;
   smokingStatus: 'never' | 'former' | 'current';
   alcoholConsumption: 'none' | 'occasional' | 'moderate' | 'heavy';
