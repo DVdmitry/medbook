@@ -53,27 +53,27 @@ function bookDoctor(doctorId: string) {
 </script>
 
 <template>
-  <div class="py-16 min-h-screen">
+  <div class="py-16 min-h-screen bg-gray-50 dark:bg-gray-950">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Header with Gradient Text -->
-      <div class="text-center mb-12 animate-slide-up">
-        <h1 class="text-5xl md:text-6xl font-bold gradient-text mb-4">Find Your Doctor</h1>
-        <p class="text-xl text-gray-600 dark:text-gray-400">
+      <!-- Header - Minimalist -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">Find Your Doctor</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400">
           Browse our network of qualified healthcare professionals
         </p>
       </div>
 
-      <!-- Search and Filter with Glassmorphism -->
+      <!-- Search and Filter -->
       <div class="mb-12 space-y-6">
         <!-- Search Bar -->
-        <div class="max-w-2xl mx-auto animate-fade-in">
+        <div class="max-w-2xl mx-auto">
           <div class="relative">
-            <MagnifyingGlassIcon class="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+            <MagnifyingGlassIcon class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               v-model="searchQuery"
               type="text"
               placeholder="Search by doctor name or specialty..."
-              class="form-input text-lg pl-14"
+              class="w-full px-4 py-3 pl-12 bg-white dark:bg-gray-900 rounded-lg border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-sky-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200"
             />
           </div>
         </div>
@@ -85,10 +85,10 @@ function bookDoctor(doctorId: string) {
             :key="specialty.value"
             @click="selectedSpecialty = specialty.value"
             :class="[
-              'px-6 py-3 rounded-xl font-semibold transition-all duration-300',
+              'px-6 py-3 rounded-lg font-medium transition-colors duration-200',
               selectedSpecialty === specialty.value
-                ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg scale-105'
-                : 'backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 text-gray-700 dark:text-gray-300 hover:scale-105 border border-gray-200/50 dark:border-gray-700/50'
+                ? 'bg-sky-600 dark:bg-sky-500 text-white'
+                : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:border-sky-500 dark:hover:border-sky-500'
             ]"
           >
             {{ specialty.label }}
@@ -96,104 +96,90 @@ function bookDoctor(doctorId: string) {
         </div>
       </div>
 
-      <!-- Results Count with Badge -->
+      <!-- Results Count -->
       <div class="text-center mb-8">
-        <span class="badge-glass text-lg px-6 py-3">
+        <span class="text-gray-600 dark:text-gray-400 font-medium">
           Found {{ filteredDoctors.length }} doctor{{ filteredDoctors.length !== 1 ? 's' : '' }}
         </span>
       </div>
 
-      <!-- Doctor Cards Grid with Stagger Animation -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Doctor Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
-          v-for="(doctor, index) in filteredDoctors"
+          v-for="doctor in filteredDoctors"
           :key="doctor.id"
-          class="glass-card-hover p-6 group animate-scale-in"
-          :style="{ animationDelay: `${index * 0.1}s` }"
+          class="bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-sky-500 dark:hover:border-sky-500 transition-colors duration-200"
         >
-          <!-- Doctor Avatar with Gradient Border -->
-          <div class="flex items-start space-x-4 mb-6">
-            <div class="relative">
-              <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl blur-sm opacity-75 group-hover:opacity-100 transition-opacity"></div>
-              <img
-                :src="doctor.avatar"
-                :alt="doctor.name"
-                class="relative w-20 h-20 rounded-2xl object-cover border-2 border-white dark:border-gray-800"
-              />
-            </div>
+          <!-- Doctor Avatar -->
+          <div class="flex items-start space-x-4 mb-5">
+            <img
+              :src="doctor.avatar"
+              :alt="doctor.name"
+              class="w-16 h-16 rounded-lg object-cover"
+            />
             <div class="flex-1">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                 {{ doctor.name }}
               </h3>
-              <p class="text-primary-600 dark:text-primary-400 font-semibold">{{ doctor.specialtyLabel }}</p>
-              <div class="flex items-center mt-2 space-x-1">
-                <StarIconSolid class="w-5 h-5 text-yellow-500" />
-                <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+              <p class="text-sky-600 dark:text-sky-400 font-medium text-sm">{{ doctor.specialtyLabel }}</p>
+              <div class="flex items-center mt-1.5 space-x-1">
+                <StarIconSolid class="w-4 h-4 text-yellow-500" />
+                <span class="text-sm font-medium text-gray-900 dark:text-white">
                   {{ doctor.rating }}
                 </span>
                 <span class="text-sm text-gray-500 dark:text-gray-400">
-                  ({{ doctor.reviewCount }} reviews)
+                  ({{ doctor.reviewCount }})
                 </span>
               </div>
             </div>
           </div>
 
-          <!-- Doctor Info with Icons -->
-          <div class="space-y-3 mb-6">
-            <div class="flex items-center space-x-3 text-sm">
-              <div class="w-8 h-8 rounded-lg bg-blue-500/10 dark:bg-blue-400/10 flex items-center justify-center flex-shrink-0">
-                <CalendarIcon class="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              </div>
-              <span class="text-gray-700 dark:text-gray-300">
-                <span class="font-semibold">{{ doctor.experience }}</span> years experience
-              </span>
+          <!-- Doctor Info -->
+          <div class="space-y-2.5 mb-5">
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <CalendarIcon class="w-4 h-4 flex-shrink-0" />
+              <span>{{ doctor.experience }} years experience</span>
             </div>
 
-            <div class="flex items-center space-x-3 text-sm">
-              <div class="w-8 h-8 rounded-lg bg-purple-500/10 dark:bg-purple-400/10 flex items-center justify-center flex-shrink-0">
-                <AcademicCapIcon class="w-4 h-4 text-purple-600 dark:text-purple-400" />
-              </div>
-              <span class="text-gray-700 dark:text-gray-300 line-clamp-1">{{ doctor.education }}</span>
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <AcademicCapIcon class="w-4 h-4 flex-shrink-0" />
+              <span class="line-clamp-1">{{ doctor.education }}</span>
             </div>
 
-            <div class="flex items-center space-x-3 text-sm">
-              <div class="w-8 h-8 rounded-lg bg-green-500/10 dark:bg-green-400/10 flex items-center justify-center flex-shrink-0">
-                <LanguageIcon class="w-4 h-4 text-green-600 dark:text-green-400" />
-              </div>
-              <span class="text-gray-700 dark:text-gray-300">{{ doctor.languages.join(', ') }}</span>
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <LanguageIcon class="w-4 h-4 flex-shrink-0" />
+              <span>{{ doctor.languages.join(', ') }}</span>
             </div>
 
-            <div class="flex items-center space-x-3 text-sm">
-              <div class="w-8 h-8 rounded-lg bg-orange-500/10 dark:bg-orange-400/10 flex items-center justify-center flex-shrink-0">
-                <CurrencyDollarIcon class="w-4 h-4 text-orange-600 dark:text-orange-400" />
-              </div>
-              <span class="text-gray-700 dark:text-gray-300">
-                <span class="font-bold text-primary-600 dark:text-primary-400">${{ doctor.consultationFee }}</span> consultation
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <CurrencyDollarIcon class="w-4 h-4 flex-shrink-0" />
+              <span>
+                <span class="font-semibold text-gray-900 dark:text-white">${{ doctor.consultationFee }}</span> consultation
               </span>
             </div>
           </div>
 
           <!-- Specialty Description -->
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 leading-relaxed">
             {{ specialtyDescriptions[doctor.specialty] }}
           </p>
 
-          <!-- Book Button with Gradient -->
-          <button @click="bookDoctor(doctor.id)" class="btn-primary w-full">
+          <!-- Book Button -->
+          <button @click="bookDoctor(doctor.id)" class="w-full bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
             Book Appointment
           </button>
         </div>
       </div>
 
-      <!-- Empty State with Modern Design -->
-      <div v-if="filteredDoctors.length === 0" class="text-center py-20 animate-fade-in">
-        <div class="glass-card max-w-md mx-auto p-12">
-          <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
-            <MagnifyingGlassIcon class="w-12 h-12 text-gray-400 dark:text-gray-600" />
+      <!-- Empty State -->
+      <div v-if="filteredDoctors.length === 0" class="text-center py-20">
+        <div class="max-w-md mx-auto bg-white dark:bg-gray-900 p-12 rounded-lg border border-gray-200 dark:border-gray-800">
+          <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+            <MagnifyingGlassIcon class="w-8 h-8 text-gray-400" />
           </div>
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">No doctors found</h3>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No doctors found</h3>
           <p class="text-gray-600 dark:text-gray-400 mb-6">Try adjusting your search or filters</p>
-          <button @click="selectedSpecialty = 'all'; searchQuery = ''" class="btn-secondary">
+          <button @click="selectedSpecialty = 'all'; searchQuery = ''" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 border border-gray-300 dark:border-gray-600">
             Clear Filters
           </button>
         </div>

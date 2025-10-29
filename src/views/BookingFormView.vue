@@ -71,34 +71,34 @@ function handleConfirm() {
 </script>
 
 <template>
-  <div class="py-16 min-h-screen">
+  <div class="py-16 min-h-screen bg-gray-50 dark:bg-gray-950">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div v-if="!doctor" class="text-center py-32">
-        <div class="glass-card max-w-md mx-auto p-12">
-          <div class="w-16 h-16 border-4 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-6"></div>
-          <p class="text-xl font-semibold text-gray-700 dark:text-gray-300">Loading...</p>
+        <div class="max-w-md mx-auto bg-white dark:bg-gray-900 p-12 rounded-lg border border-gray-200 dark:border-gray-800">
+          <div class="w-12 h-12 border-4 border-gray-200 dark:border-gray-800 border-t-sky-600 dark:border-t-sky-500 rounded-full animate-spin mx-auto mb-6"></div>
+          <p class="text-lg font-medium text-gray-700 dark:text-gray-300">Loading...</p>
         </div>
       </div>
 
-      <div v-else class="animate-fade-in">
-        <!-- Modern Progress Bar with Gradient -->
-        <div class="mb-12 glass-card p-6">
+      <div v-else>
+        <!-- Progress Bar -->
+        <div class="mb-10 bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-800">
           <div class="flex justify-between mb-3">
-            <span class="text-sm font-bold text-gray-800 dark:text-gray-200">Step {{ currentStepIndex + 1 }} of 5</span>
-            <span class="text-sm font-bold gradient-text">{{ stepTitles[currentStep] }}</span>
+            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Step {{ currentStepIndex + 1 }} of 5</span>
+            <span class="text-sm font-semibold text-sky-600 dark:text-sky-400">{{ stepTitles[currentStep] }}</span>
           </div>
-          <div class="w-full h-3 bg-gray-200/50 dark:bg-gray-800/50 rounded-full overflow-hidden backdrop-blur-xl">
+          <div class="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
             <div
-              class="progress-bar"
+              class="h-full bg-sky-600 dark:bg-sky-500 transition-all duration-300"
               :style="{ width: `${((currentStepIndex + 1) / 5) * 100}%` }"
             ></div>
           </div>
         </div>
 
-        <!-- Modern Step Indicators -->
-        <div class="flex justify-between mb-12 relative">
+        <!-- Step Indicators -->
+        <div class="flex justify-between mb-10 relative">
           <!-- Connecting Line -->
-          <div class="absolute top-5 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-800 -z-10"></div>
+          <div class="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-800 -z-10"></div>
 
           <div
             v-for="(step, index) in bookingStore.bookingSteps"
@@ -108,19 +108,19 @@ function handleConfirm() {
             <div class="flex flex-col items-center">
               <div
                 :class="[
-                  'w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-sm font-bold mb-3 transition-all duration-300 relative',
+                  'w-10 h-10 rounded-full mx-auto flex items-center justify-center text-sm font-semibold mb-2 transition-all duration-300 relative',
                   currentStepIndex >= index
-                    ? 'bg-gradient-to-br from-primary-600 to-accent-600 text-white shadow-lg scale-110'
-                    : 'backdrop-blur-xl bg-gray-200/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400'
+                    ? 'bg-sky-600 dark:bg-sky-500 text-white'
+                    : 'bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
                 ]"
               >
-                <span v-if="currentStepIndex > index" class="text-xl">✓</span>
+                <span v-if="currentStepIndex > index" class="text-base">✓</span>
                 <span v-else>{{ index + 1 }}</span>
               </div>
               <div
                 :class="[
-                  'text-xs font-semibold hidden md:block',
-                  currentStepIndex >= index ? 'gradient-text' : 'text-gray-500 dark:text-gray-500'
+                  'text-xs font-medium hidden md:block',
+                  currentStepIndex >= index ? 'text-sky-600 dark:text-sky-400' : 'text-gray-500 dark:text-gray-500'
                 ]"
               >
                 {{ stepTitles[step] }}
@@ -129,8 +129,8 @@ function handleConfirm() {
           </div>
         </div>
 
-        <!-- Form Content with Glass Card -->
-        <div class="glass-card p-8 animate-scale-in">
+        <!-- Form Content -->
+        <div class="bg-white dark:bg-gray-900 p-8 rounded-lg border border-gray-200 dark:border-gray-800">
           <PatientInfoForm v-if="currentStep === 'patient-info'" @submit="handleNext" />
 
           <MedicalHistoryForm
@@ -152,84 +152,81 @@ function handleConfirm() {
             @back="handleBack"
           />
 
-          <!-- Confirmation Step with Modern Design -->
-          <div v-else-if="currentStep === 'confirmation'" class="space-y-8">
-            <h2 class="text-3xl font-bold gradient-text mb-8">Review Your Appointment</h2>
+          <!-- Confirmation Step -->
+          <div v-else-if="currentStep === 'confirmation'" class="space-y-6">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Review Your Appointment</h2>
 
-            <!-- Doctor Info with Gradient Border -->
-            <div class="backdrop-blur-xl bg-gradient-to-br from-primary-50 to-accent-50 dark:from-primary-950/50 dark:to-accent-950/50 rounded-2xl p-6 border border-primary-200/50 dark:border-primary-800/50">
-              <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Doctor Information</h3>
+            <!-- Doctor Info -->
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+              <h3 class="text-base font-semibold mb-4 text-gray-900 dark:text-white">Doctor Information</h3>
               <div class="flex items-center space-x-4">
-                <div class="relative">
-                  <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl blur-sm"></div>
-                  <img :src="doctor.avatar" :alt="doctor.name" class="relative w-24 h-24 rounded-2xl border-2 border-white dark:border-gray-800" />
-                </div>
+                <img :src="doctor.avatar" :alt="doctor.name" class="w-20 h-20 rounded-lg" />
                 <div>
-                  <p class="font-bold text-xl text-gray-900 dark:text-gray-100">{{ doctor.name }}</p>
-                  <p class="text-primary-600 dark:text-primary-400 font-semibold">{{ doctor.specialtyLabel }}</p>
+                  <p class="font-semibold text-lg text-gray-900 dark:text-white">{{ doctor.name }}</p>
+                  <p class="text-sky-600 dark:text-sky-400 font-medium">{{ doctor.specialtyLabel }}</p>
                   <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ doctor.experience }} years of experience</p>
                 </div>
               </div>
             </div>
 
-            <!-- Appointment Details with Icons -->
-            <div class="backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-800/50">
-              <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Appointment Details</h3>
-              <dl class="space-y-4">
+            <!-- Appointment Details -->
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+              <h3 class="text-base font-semibold mb-4 text-gray-900 dark:text-white">Appointment Details</h3>
+              <dl class="space-y-3">
                 <div class="flex justify-between items-center">
-                  <dt class="text-gray-600 dark:text-gray-400 font-medium">Date:</dt>
-                  <dd class="font-semibold text-gray-900 dark:text-gray-100">
+                  <dt class="text-gray-600 dark:text-gray-400">Date:</dt>
+                  <dd class="font-medium text-gray-900 dark:text-white">
                     {{ new Date(bookingStore.appointmentDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
                   </dd>
                 </div>
                 <div class="flex justify-between items-center">
-                  <dt class="text-gray-600 dark:text-gray-400 font-medium">Time:</dt>
-                  <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ bookingStore.appointmentTime }}</dd>
+                  <dt class="text-gray-600 dark:text-gray-400">Time:</dt>
+                  <dd class="font-medium text-gray-900 dark:text-white">{{ bookingStore.appointmentTime }}</dd>
                 </div>
                 <div class="flex justify-between items-center">
-                  <dt class="text-gray-600 dark:text-gray-400 font-medium">Reason:</dt>
-                  <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ bookingStore.appointmentReason }}</dd>
+                  <dt class="text-gray-600 dark:text-gray-400">Reason:</dt>
+                  <dd class="font-medium text-gray-900 dark:text-white">{{ bookingStore.appointmentReason }}</dd>
                 </div>
-                <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <dt class="text-gray-700 dark:text-gray-300 font-semibold">Consultation Fee:</dt>
-                  <dd class="font-bold text-2xl gradient-text">${{ doctor.consultationFee }}</dd>
+                <div class="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <dt class="text-gray-700 dark:text-gray-300 font-medium">Consultation Fee:</dt>
+                  <dd class="font-bold text-xl text-gray-900 dark:text-white">${{ doctor.consultationFee }}</dd>
                 </div>
               </dl>
             </div>
 
             <!-- Patient Info -->
-            <div class="backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-800/50">
-              <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Patient Information</h3>
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+              <h3 class="text-base font-semibold mb-4 text-gray-900 dark:text-white">Patient Information</h3>
               <dl class="space-y-3">
                 <div class="flex justify-between">
-                  <dt class="text-gray-600 dark:text-gray-400 font-medium">Name:</dt>
-                  <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ bookingStore.patientInfo.firstName }} {{ bookingStore.patientInfo.lastName }}</dd>
+                  <dt class="text-gray-600 dark:text-gray-400">Name:</dt>
+                  <dd class="font-medium text-gray-900 dark:text-white">{{ bookingStore.patientInfo.firstName }} {{ bookingStore.patientInfo.lastName }}</dd>
                 </div>
                 <div class="flex justify-between">
-                  <dt class="text-gray-600 dark:text-gray-400 font-medium">Email:</dt>
-                  <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ bookingStore.patientInfo.email }}</dd>
+                  <dt class="text-gray-600 dark:text-gray-400">Email:</dt>
+                  <dd class="font-medium text-gray-900 dark:text-white">{{ bookingStore.patientInfo.email }}</dd>
                 </div>
                 <div class="flex justify-between">
-                  <dt class="text-gray-600 dark:text-gray-400 font-medium">Phone:</dt>
-                  <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ bookingStore.patientInfo.phone }}</dd>
+                  <dt class="text-gray-600 dark:text-gray-400">Phone:</dt>
+                  <dd class="font-medium text-gray-900 dark:text-white">{{ bookingStore.patientInfo.phone }}</dd>
                 </div>
               </dl>
             </div>
 
             <!-- Terms Notice -->
-            <div class="backdrop-blur-xl bg-blue-500/10 dark:bg-blue-400/10 border border-blue-500/30 dark:border-blue-400/30 rounded-2xl p-6">
-              <p class="text-sm text-blue-900 dark:text-blue-100 leading-relaxed">
+            <div class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 rounded-lg p-5">
+              <p class="text-sm text-sky-900 dark:text-sky-100 leading-relaxed">
                 By confirming this appointment, you agree to our terms of service and privacy policy.
                 You will receive a confirmation email shortly.
               </p>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex justify-between pt-6">
-              <button @click="handleBack" class="btn-secondary px-10 py-4 text-lg">
+            <div class="flex justify-between pt-4">
+              <button @click="handleBack" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold px-10 py-3 rounded-lg transition-colors duration-200 border border-gray-300 dark:border-gray-600">
                 Back
               </button>
-              <button @click="handleConfirm" class="btn-primary px-10 py-4 text-lg shadow-2xl">
+              <button @click="handleConfirm" class="bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600 text-white font-semibold px-10 py-3 rounded-lg transition-colors duration-200">
                 Confirm Appointment
               </button>
             </div>
