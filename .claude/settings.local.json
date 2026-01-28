@@ -7,7 +7,12 @@
       "Bash(gh --version)",
       "Bash(gh repo create:*)",
       "Bash(tree:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(grep:*)",
+      "WebSearch",
+      "Bash(find:*)",
+      "Bash(cd:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
