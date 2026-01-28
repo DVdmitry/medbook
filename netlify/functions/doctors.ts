@@ -35,7 +35,9 @@ export const handler: Handler = async (event) => {
       reviewCount: doctor.review_count,
       experience: doctor.experience,
       education: doctor.education,
-      languages: doctor.languages ? doctor.languages.split(',').map((l: string) => l.trim()) : [],
+      languages: Array.isArray(doctor.languages)
+        ? doctor.languages
+        : (typeof doctor.languages === 'string' ? doctor.languages.split(',').map((l: string) => l.trim()) : []),
       consultationFee: parseFloat(doctor.consultation_fee),
       avatar: doctor.avatar,
       bio: doctor.bio,
