@@ -115,20 +115,41 @@ export const handler: Handler = async (event) => {
     // Generate IDs
     const appointmentIdGen = generateAppointmentId();
     const confirmationNumber = generateConfirmationNumber();
+    const finalSlotId = slotId || `slot_${Date.now()}`;
+    const finalSlotDate = slotDate || new Date().toISOString().slice(0, 10);
+    const finalStartTime = slotStartTime || '09:00';
 
     // Calculate end time (30 min slots)
-    const [hours, minutes] = (slotStartTime || '09:00').split(':').map(Number);
+    const [hours, minutes] = finalStartTime.split(':').map(Number);
     const endMinutes = hours * 60 + minutes + 30;
     const slotEndTime = `${Math.floor(endMinutes / 60).toString().padStart(2, '0')}:${(endMinutes % 60).toString().padStart(2, '0')}`;
+
+    // Create slot first (FK constraint requires slot to exist)
+    const { error: slotError } = await supabase
+      .from('slots')
+      .upsert({
+        id: finalSlotId,
+        doctor_id: doctorId,
+        date: finalSlotDate,
+        start_time: finalStartTime,
+        end_time: slotEndTime,
+        status: 'booked',
+        appointment_id: appointmentIdGen,
+      });
+
+    if (slotError) {
+      console.error('Slot error:', slotError);
+      return errorResponse('Failed to reserve slot', 'SLOT_ERROR', 500);
+    }
 
     // Create appointment
     const { error: insertError } = await supabase.from('appointments').insert({
       id: appointmentIdGen,
       confirmation_number: confirmationNumber,
       doctor_id: doctorId,
-      slot_id: slotId || `slot_${Date.now()}`,
-      slot_date: slotDate || new Date().toISOString().slice(0, 10),
-      slot_start_time: slotStartTime || '09:00',
+      slot_id: finalSlotId,
+      slot_date: finalSlotDate,
+      slot_start_time: finalStartTime,
       slot_end_time: slotEndTime,
       first_name: patient.firstName,
       last_name: patient.lastName,
@@ -145,21 +166,6 @@ export const handler: Handler = async (event) => {
     if (insertError) {
       console.error('Insert error:', insertError);
       return errorResponse('Failed to create appointment', 'DATABASE_ERROR', 500);
-    }
-
-    // Mark slot as booked (if slot tracking is enabled)
-    if (slotId) {
-      await supabase
-        .from('slots')
-        .upsert({
-          id: slotId,
-          doctor_id: doctorId,
-          date: slotDate,
-          start_time: slotStartTime,
-          end_time: slotEndTime,
-          status: 'booked',
-          appointment_id: appointmentIdGen,
-        });
     }
 
     return jsonResponse({
