@@ -12,7 +12,8 @@
       "WebSearch",
       "Bash(find:*)",
       "Bash(cd:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

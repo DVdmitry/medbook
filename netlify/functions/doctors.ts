@@ -35,7 +35,7 @@ export const handler: Handler = async (event) => {
       reviewCount: doctor.review_count,
       experience: doctor.experience,
       education: doctor.education,
-      languages: JSON.parse(doctor.languages || '[]'),
+      languages: doctor.languages ? doctor.languages.split(',').map((l: string) => l.trim()) : [],
       consultationFee: parseFloat(doctor.consultation_fee),
       avatar: doctor.avatar,
       bio: doctor.bio,
