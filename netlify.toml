@@ -7,10 +7,45 @@
   node_bundler = "esbuild"
   external_node_modules = ["@supabase/supabase-js"]
 
-# Redirects for API routes (must be before SPA fallback)
+# API Routes - specific routes first, then general
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  from = "/api/health"
+  to = "/.netlify/functions/health"
+  status = 200
+
+[[redirects]]
+  from = "/api/doctors/:id/slots"
+  to = "/.netlify/functions/slots"
+  status = 200
+
+[[redirects]]
+  from = "/api/doctors/:id/schedule"
+  to = "/.netlify/functions/schedules"
+  status = 200
+
+[[redirects]]
+  from = "/api/doctors/:id/booking-fields"
+  to = "/.netlify/functions/booking-fields"
+  status = 200
+
+[[redirects]]
+  from = "/api/doctors/:id"
+  to = "/.netlify/functions/doctors"
+  status = 200
+
+[[redirects]]
+  from = "/api/doctors"
+  to = "/.netlify/functions/doctors"
+  status = 200
+
+[[redirects]]
+  from = "/api/appointments/:id"
+  to = "/.netlify/functions/appointments"
+  status = 200
+
+[[redirects]]
+  from = "/api/appointments"
+  to = "/.netlify/functions/appointments"
   status = 200
 
 # SPA fallback
