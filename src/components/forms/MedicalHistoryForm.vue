@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { useBookingStore } from '@/stores/booking.store';
 import type { MedicalHistory } from '@/types/medical.types';
+import { ArrowRightIcon, ArrowLeftIcon, SparklesIcon } from '@heroicons/vue/24/outline';
 
 const bookingStore = useBookingStore();
 
@@ -62,76 +63,82 @@ function handleSubmit() {
 
 <template>
   <div class="space-y-6">
+    <!-- Header -->
     <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Medical History</h2>
-      <label class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+      <div>
+        <h2 class="text-2xl font-bold text-neutral-900 dark:text-white">Medical History</h2>
+        <p class="text-neutral-600 dark:text-neutral-400 mt-1 text-sm">Share your health background</p>
+      </div>
+      <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
         <input
           v-model="fillWithDefaults"
           type="checkbox"
-          class="w-4 h-4 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2"
+          class="form-checkbox"
         />
-        <span>Fill with default data</span>
+        <SparklesIcon class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Demo data</span>
       </label>
     </div>
 
-    <form @submit.prevent="handleSubmit" class="space-y-6">
+    <form @submit.prevent="handleSubmit" class="space-y-5">
       <!-- Allergies -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Allergies (medications, food, environmental)</label>
         <textarea
           v-model="formData.allergies"
           rows="2"
-          class="form-input"
+          class="form-input resize-y"
           placeholder="e.g., Penicillin, Peanuts, Pollen"
         />
       </div>
 
       <!-- Chronic Conditions -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Chronic Conditions</label>
         <textarea
           v-model="formData.chronicConditions"
           rows="2"
-          class="form-input"
+          class="form-input resize-y"
           placeholder="e.g., Diabetes, Hypertension, Asthma"
         />
       </div>
 
       <!-- Current Medications -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Current Medications</label>
         <textarea
           v-model="formData.currentMedications"
           rows="2"
-          class="form-input"
+          class="form-input resize-y"
           placeholder="e.g., Lisinopril 10mg daily"
         />
       </div>
 
       <!-- Previous Surgeries -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Previous Surgeries</label>
         <textarea
           v-model="formData.previousSurgeries"
           rows="2"
-          class="form-input"
+          class="form-input resize-y"
           placeholder="e.g., Appendectomy 2020"
         />
       </div>
 
       <!-- Family History -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Family Medical History</label>
         <textarea
           v-model="formData.familyHistory"
           rows="2"
-          class="form-input"
+          class="form-input resize-y"
           placeholder="e.g., Father - Heart Disease"
         />
       </div>
 
+      <!-- Lifestyle Section -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
+        <div class="form-group">
           <label class="form-label">Blood Type</label>
           <select v-model="formData.bloodType" class="form-input">
             <option value="">Unknown</option>
@@ -146,7 +153,7 @@ function handleSubmit() {
           </select>
         </div>
 
-        <div>
+        <div class="form-group">
           <label class="form-label">Smoking Status *</label>
           <select v-model="formData.smokingStatus" required class="form-input">
             <option value="never">Never</option>
@@ -155,7 +162,7 @@ function handleSubmit() {
           </select>
         </div>
 
-        <div>
+        <div class="form-group">
           <label class="form-label">Alcohol Consumption *</label>
           <select v-model="formData.alcoholConsumption" required class="form-input">
             <option value="none">None</option>
@@ -166,12 +173,15 @@ function handleSubmit() {
         </div>
       </div>
 
+      <!-- Action Buttons -->
       <div class="flex justify-between pt-4">
-        <button type="button" @click="emit('back')" class="btn-secondary px-8 py-3">
+        <button type="button" @click="emit('back')" class="btn-secondary group">
+          <ArrowLeftIcon class="w-5 h-5 transition-transform group-hover:-translate-x-1" />
           Back
         </button>
-        <button type="submit" class="btn-primary px-8 py-3">
+        <button type="submit" class="btn-primary group">
           Continue to Symptoms
+          <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
         </button>
       </div>
     </form>

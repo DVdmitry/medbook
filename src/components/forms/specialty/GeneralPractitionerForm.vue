@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { useBookingStore } from '@/stores/booking.store';
 import type { GeneralPractitionerForm } from '@/types/medical.types';
+import { ArrowRightIcon, ArrowLeftIcon, SparklesIcon } from '@heroicons/vue/24/outline';
 
 const bookingStore = useBookingStore();
 
@@ -16,6 +17,25 @@ const formData = ref<Partial<GeneralPractitionerForm>>({
   covidExposure: false,
   additionalSymptoms: [],
   ...bookingStore.specialtyFormData
+});
+
+const fillWithDefaults = ref(false);
+
+watch(fillWithDefaults, (shouldFill) => {
+  if (shouldFill) {
+    formData.value = {
+      chiefComplaint: 'Persistent fatigue and occasional headaches for the past week',
+      symptomDuration: '1-2-weeks',
+      fever: true,
+      temperature: '99.5°F',
+      cough: true,
+      fatigue: true,
+      bodyAches: false,
+      recentTravel: false,
+      covidExposure: false,
+      additionalSymptoms: ['Headache', 'Sore Throat', 'Congestion']
+    };
+  }
 });
 
 watch(formData, (newData) => {
@@ -44,24 +64,38 @@ function toggleSymptom(symptom: string) {
 
 <template>
   <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">General Health Assessment</h2>
-    <p class="text-gray-600 mb-6">Please describe your current health concerns.</p>
-
-    <form @submit.prevent="emit('submit')" class="space-y-6">
-      <!-- Chief Complaint -->
+    <!-- Header -->
+    <div class="flex items-center justify-between">
       <div>
+        <h2 class="text-2xl font-bold text-neutral-900 dark:text-white">General Health Assessment</h2>
+        <p class="text-neutral-600 dark:text-neutral-400 mt-1 text-sm">Describe your current health concerns</p>
+      </div>
+      <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
+        <input
+          v-model="fillWithDefaults"
+          type="checkbox"
+          class="form-checkbox"
+        />
+        <SparklesIcon class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Demo data</span>
+      </label>
+    </div>
+
+    <form @submit.prevent="emit('submit')" class="space-y-5">
+      <!-- Chief Complaint -->
+      <div class="form-group">
         <label class="form-label">What is your main reason for this visit? *</label>
         <textarea
           v-model="formData.chiefComplaint"
           rows="3"
           required
-          class="form-input"
+          class="form-input resize-y"
           placeholder="Describe your primary concern..."
         />
       </div>
 
       <!-- Duration -->
-      <div>
+      <div class="form-group">
         <label class="form-label">How long have you had these symptoms? *</label>
         <select v-model="formData.symptomDuration" required class="form-input">
           <option value="">Select duration</option>
@@ -74,15 +108,28 @@ function toggleSymptom(symptom: string) {
       </div>
 
       <!-- Primary Symptoms -->
-      <div>
+      <div class="space-y-3">
         <label class="form-label">Primary Symptoms (check all that apply)</label>
-        <div class="space-y-2">
-          <label class="flex items-center space-x-3 cursor-pointer">
-            <input v-model="formData.fever" type="checkbox" class="w-5 h-5 text-primary-600" />
-            <span class="text-gray-900">Fever</span>
-          </label>
 
-          <div v-if="formData.fever" class="ml-8">
+        <label
+          class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-200"
+          :class="formData.fever
+            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 dark:border-primary-400'
+            : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'"
+        >
+          <input v-model="formData.fever" type="checkbox" class="form-checkbox" />
+          <span class="font-medium text-neutral-900 dark:text-white">Fever</span>
+        </label>
+
+        <Transition
+          enter-active-class="transition-all duration-300"
+          leave-active-class="transition-all duration-200"
+          enter-from-class="opacity-0 max-h-0"
+          leave-to-class="opacity-0 max-h-0"
+          enter-to-class="opacity-100 max-h-20"
+          leave-from-class="opacity-100 max-h-20"
+        >
+          <div v-if="formData.fever" class="form-group ml-8">
             <label class="form-label text-sm">Temperature (if measured)</label>
             <input
               v-model="formData.temperature"
@@ -91,26 +138,41 @@ function toggleSymptom(symptom: string) {
               placeholder="e.g., 101.5°F or 38.6°C"
             />
           </div>
+        </Transition>
 
-          <label class="flex items-center space-x-3 cursor-pointer">
-            <input v-model="formData.cough" type="checkbox" class="w-5 h-5 text-primary-600" />
-            <span class="text-gray-900">Cough</span>
-          </label>
+        <label
+          class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-200"
+          :class="formData.cough
+            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 dark:border-primary-400'
+            : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'"
+        >
+          <input v-model="formData.cough" type="checkbox" class="form-checkbox" />
+          <span class="font-medium text-neutral-900 dark:text-white">Cough</span>
+        </label>
 
-          <label class="flex items-center space-x-3 cursor-pointer">
-            <input v-model="formData.fatigue" type="checkbox" class="w-5 h-5 text-primary-600" />
-            <span class="text-gray-900">Fatigue or weakness</span>
-          </label>
+        <label
+          class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-200"
+          :class="formData.fatigue
+            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 dark:border-primary-400'
+            : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'"
+        >
+          <input v-model="formData.fatigue" type="checkbox" class="form-checkbox" />
+          <span class="font-medium text-neutral-900 dark:text-white">Fatigue or weakness</span>
+        </label>
 
-          <label class="flex items-center space-x-3 cursor-pointer">
-            <input v-model="formData.bodyAches" type="checkbox" class="w-5 h-5 text-primary-600" />
-            <span class="text-gray-900">Body aches</span>
-          </label>
-        </div>
+        <label
+          class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-200"
+          :class="formData.bodyAches
+            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 dark:border-primary-400'
+            : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'"
+        >
+          <input v-model="formData.bodyAches" type="checkbox" class="form-checkbox" />
+          <span class="font-medium text-neutral-900 dark:text-white">Body aches</span>
+        </label>
       </div>
 
       <!-- Additional Symptoms -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Additional Symptoms</label>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
           <button
@@ -118,40 +180,48 @@ function toggleSymptom(symptom: string) {
             :key="symptom"
             type="button"
             @click="toggleSymptom(symptom)"
-            :class="[
-              'px-3 py-2 rounded-lg border-2 transition-all text-sm',
-              formData.additionalSymptoms?.includes(symptom)
-                ? 'border-primary-600 bg-primary-50 text-primary-700 font-medium'
-                : 'border-gray-300 hover:border-gray-400'
-            ]"
+            class="px-4 py-2.5 rounded-xl border-2 font-medium text-sm transition-all duration-200"
+            :class="formData.additionalSymptoms?.includes(symptom)
+              ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:border-primary-400 dark:text-primary-300'
+              : 'border-neutral-200 text-neutral-700 hover:border-neutral-300 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600'"
           >
             {{ symptom }}
           </button>
         </div>
       </div>
 
-      <!-- Recent Travel -->
-      <div>
-        <label class="flex items-center space-x-3 cursor-pointer">
-          <input v-model="formData.recentTravel" type="checkbox" class="w-5 h-5 text-primary-600" />
-          <span class="text-gray-900">Recent travel (within last 14 days)</span>
+      <!-- Additional Info -->
+      <div class="space-y-3 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+        <label
+          class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-200"
+          :class="formData.recentTravel
+            ? 'border-warning-500 bg-warning-50 dark:bg-warning-900/20 dark:border-warning-400'
+            : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'"
+        >
+          <input v-model="formData.recentTravel" type="checkbox" class="form-checkbox" />
+          <span class="font-medium text-neutral-900 dark:text-white">Recent travel (within last 14 days)</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-200"
+          :class="formData.covidExposure
+            ? 'border-warning-500 bg-warning-50 dark:bg-warning-900/20 dark:border-warning-400'
+            : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'"
+        >
+          <input v-model="formData.covidExposure" type="checkbox" class="form-checkbox" />
+          <span class="font-medium text-neutral-900 dark:text-white">Possible COVID-19 exposure</span>
         </label>
       </div>
 
-      <!-- COVID Exposure -->
-      <div>
-        <label class="flex items-center space-x-3 cursor-pointer">
-          <input v-model="formData.covidExposure" type="checkbox" class="w-5 h-5 text-primary-600" />
-          <span class="text-gray-900">Possible COVID-19 exposure</span>
-        </label>
-      </div>
-
+      <!-- Action Buttons -->
       <div class="flex justify-between pt-4">
-        <button type="button" @click="emit('back')" class="btn-secondary px-8 py-3">
+        <button type="button" @click="emit('back')" class="btn-secondary group">
+          <ArrowLeftIcon class="w-5 h-5 transition-transform group-hover:-translate-x-1" />
           Back
         </button>
-        <button type="submit" class="btn-primary px-8 py-3">
-          Continue to Appointment Time
+        <button type="submit" class="btn-primary group">
+          Continue to Appointment
+          <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
         </button>
       </div>
     </form>

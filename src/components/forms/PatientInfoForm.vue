@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { useBookingStore } from '@/stores/booking.store';
 import type { BasePatientInfo } from '@/types/medical.types';
+import { ArrowRightIcon, SparklesIcon } from '@heroicons/vue/24/outline';
 
 const bookingStore = useBookingStore();
 
@@ -44,21 +45,27 @@ function handleSubmit() {
 
 <template>
   <div class="space-y-6">
+    <!-- Header -->
     <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h2>
-      <label class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+      <div>
+        <h2 class="text-2xl font-bold text-neutral-900 dark:text-white">Personal Information</h2>
+        <p class="text-neutral-600 dark:text-neutral-400 mt-1 text-sm">Tell us about yourself</p>
+      </div>
+      <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
         <input
           v-model="fillWithDefaults"
           type="checkbox"
-          class="w-4 h-4 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2"
+          class="form-checkbox"
         />
-        <span>Fill with default data</span>
+        <SparklesIcon class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Demo data</span>
       </label>
     </div>
 
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+    <form @submit.prevent="handleSubmit" class="space-y-6">
+      <!-- Name Fields -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+        <div class="form-group">
           <label class="form-label">First Name *</label>
           <input
             v-model="formData.firstName"
@@ -69,7 +76,7 @@ function handleSubmit() {
           />
         </div>
 
-        <div>
+        <div class="form-group">
           <label class="form-label">Last Name *</label>
           <input
             v-model="formData.lastName"
@@ -81,8 +88,9 @@ function handleSubmit() {
         </div>
       </div>
 
+      <!-- Contact Fields -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+        <div class="form-group">
           <label class="form-label">Email *</label>
           <input
             v-model="formData.email"
@@ -93,7 +101,7 @@ function handleSubmit() {
           />
         </div>
 
-        <div>
+        <div class="form-group">
           <label class="form-label">Phone Number *</label>
           <input
             v-model="formData.phone"
@@ -105,8 +113,9 @@ function handleSubmit() {
         </div>
       </div>
 
+      <!-- Personal Details -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+        <div class="form-group">
           <label class="form-label">Date of Birth *</label>
           <input
             v-model="formData.dateOfBirth"
@@ -116,7 +125,7 @@ function handleSubmit() {
           />
         </div>
 
-        <div>
+        <div class="form-group">
           <label class="form-label">Gender *</label>
           <select v-model="formData.gender" required class="form-input">
             <option value="">Select gender</option>
@@ -127,7 +136,8 @@ function handleSubmit() {
         </div>
       </div>
 
-      <div>
+      <!-- Address -->
+      <div class="form-group">
         <label class="form-label">Address *</label>
         <input
           v-model="formData.address"
@@ -138,12 +148,13 @@ function handleSubmit() {
         />
       </div>
 
-      <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Emergency Contact</h3>
+      <!-- Emergency Contact Section -->
+      <div class="pt-6 border-t border-neutral-200 dark:border-neutral-800">
+        <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-4">Emergency Contact</h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="form-label">Emergency Contact Name *</label>
+          <div class="form-group">
+            <label class="form-label">Contact Name *</label>
             <input
               v-model="formData.emergencyContact"
               type="text"
@@ -153,8 +164,8 @@ function handleSubmit() {
             />
           </div>
 
-          <div>
-            <label class="form-label">Emergency Contact Phone *</label>
+          <div class="form-group">
+            <label class="form-label">Contact Phone *</label>
             <input
               v-model="formData.emergencyPhone"
               type="tel"
@@ -166,9 +177,11 @@ function handleSubmit() {
         </div>
       </div>
 
+      <!-- Submit Button -->
       <div class="flex justify-end pt-4">
-        <button type="submit" class="btn-primary px-8 py-3">
+        <button type="submit" class="btn-primary group">
           Continue to Medical History
+          <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
         </button>
       </div>
     </form>

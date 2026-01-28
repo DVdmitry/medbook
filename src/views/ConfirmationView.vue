@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useBookingStore } from '@/stores/booking.store';
 import {
-  CheckCircleIcon,
+  CheckIcon,
   CalendarDaysIcon,
   UserCircleIcon,
   ClipboardDocumentListIcon,
-  CurrencyDollarIcon
+  CurrencyDollarIcon,
+  EnvelopeIcon,
+  ClockIcon,
+  MapPinIcon,
+  PhoneIcon,
+  ArrowRightIcon,
+  HomeIcon
 } from '@heroicons/vue/24/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/vue/24/solid';
 
 const router = useRouter();
 const bookingStore = useBookingStore();
@@ -16,12 +23,48 @@ const bookingStore = useBookingStore();
 const doctor = computed(() => bookingStore.selectedDoctor);
 const bookingData = computed(() => bookingStore.bookingData);
 
+const showCheckmark = ref(false);
+const showContent = ref(false);
+
 onMounted(() => {
-  // If no booking data, redirect to doctors page
   if (!doctor.value || !bookingData.value.appointmentDate) {
     router.push('/doctors');
+    return;
   }
+
+  // Animate checkmark first
+  setTimeout(() => {
+    showCheckmark.value = true;
+  }, 100);
+
+  // Then show content
+  setTimeout(() => {
+    showContent.value = true;
+  }, 600);
 });
+
+const nextSteps = [
+  {
+    icon: EnvelopeIcon,
+    title: 'Check Your Email',
+    description: 'Confirmation details have been sent to your inbox'
+  },
+  {
+    icon: ClockIcon,
+    title: 'Arrive 15 Minutes Early',
+    description: 'Complete any remaining paperwork before your appointment'
+  },
+  {
+    icon: ClipboardDocumentListIcon,
+    title: 'Bring Required Documents',
+    description: 'Valid ID and insurance card (if applicable)'
+  },
+  {
+    icon: PhoneIcon,
+    title: 'Need to Reschedule?',
+    description: 'Contact us at least 24 hours in advance'
+  }
+];
 
 function startNewBooking() {
   bookingStore.resetBooking();
@@ -35,129 +78,180 @@ function backToHome() {
 </script>
 
 <template>
-  <div class="py-20 min-h-screen bg-gray-50 dark:bg-gray-950">
+  <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 md:py-20">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div v-if="doctor && bookingData.appointmentDate" class="text-center">
-        <!-- Success Icon -->
-        <div class="mb-10">
-          <div class="w-20 h-20 bg-green-600 dark:bg-green-500 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircleIcon class="w-12 h-12 text-white" />
+      <div v-if="doctor && bookingData.appointmentDate">
+        <!-- Success Header -->
+        <div class="text-center mb-12">
+          <!-- Animated Checkmark -->
+          <div class="relative inline-flex items-center justify-center mb-8">
+            <!-- Outer ring animation -->
+            <div
+              class="absolute w-28 h-28 rounded-full border-4 border-success-200 dark:border-success-800 transition-all duration-500"
+              :class="showCheckmark ? 'scale-100 opacity-100' : 'scale-50 opacity-0'"
+            />
+            <!-- Inner circle -->
+            <div
+              class="w-24 h-24 rounded-full bg-gradient-to-br from-success-400 to-success-600 flex items-center justify-center shadow-glow-success transition-all duration-500"
+              :class="showCheckmark ? 'scale-100 opacity-100' : 'scale-0 opacity-0'"
+            >
+              <CheckIcon
+                class="w-12 h-12 text-white transition-all duration-300"
+                :class="showCheckmark ? 'scale-100' : 'scale-0'"
+              />
+            </div>
           </div>
+
+          <!-- Success Message -->
+          <Transition
+            enter-active-class="transition-all duration-500 ease-smooth"
+            enter-from-class="opacity-0 translate-y-4"
+          >
+            <div v-if="showContent">
+              <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-white mb-4">
+                Appointment <span class="text-gradient dark:text-gradient-dark">Confirmed!</span>
+              </h1>
+              <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-lg mx-auto">
+                Your appointment has been successfully booked. Check your email for confirmation details.
+              </p>
+            </div>
+          </Transition>
         </div>
 
-        <!-- Success Message -->
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-          Appointment Confirmed!
-        </h1>
-        <p class="text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-          Your appointment has been successfully booked. You will receive a confirmation email shortly.
-        </p>
+        <!-- Booking Details Card -->
+        <Transition
+          enter-active-class="transition-all duration-500 ease-smooth delay-100"
+          enter-from-class="opacity-0 translate-y-4"
+        >
+          <div v-if="showContent" class="card p-6 sm:p-8 mb-8">
+            <h2 class="text-xl font-bold text-neutral-900 dark:text-white mb-6 text-center">
+              Appointment Details
+            </h2>
 
-        <!-- Booking Details -->
-        <div class="bg-white dark:bg-gray-900 text-left mb-10 rounded-lg border border-gray-200 dark:border-gray-800 p-8">
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Appointment Details</h2>
-
-          <!-- Doctor Info -->
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 mb-6 border border-gray-200 dark:border-gray-700">
-            <div class="flex items-center space-x-4">
-              <img :src="doctor.avatar" :alt="doctor.name" class="w-20 h-20 rounded-lg" />
-              <div class="text-left">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ doctor.name }}</h3>
-                <p class="text-sky-600 dark:text-sky-400 font-medium">{{ doctor.specialtyLabel }}</p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ doctor.experience }} years of experience</p>
+            <!-- Doctor Info -->
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 mb-6">
+              <div class="relative">
+                <img
+                  :src="doctor.avatar"
+                  :alt="doctor.name"
+                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover ring-2 ring-neutral-100 dark:ring-neutral-700"
+                />
+                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-success-500 rounded-full border-2 border-white dark:border-neutral-800 flex items-center justify-center">
+                  <CheckIcon class="w-3 h-3 text-white" />
+                </div>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">{{ doctor.name }}</h3>
+                <p class="text-primary-600 dark:text-primary-400 font-medium">{{ doctor.specialtyLabel }}</p>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <StarIconSolid class="w-4 h-4 text-warning-500" />
+                  <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ doctor.rating }}</span>
+                  <span class="text-sm text-neutral-500">• {{ doctor.experience }} years exp</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Appointment Info Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
-              <div class="flex items-start space-x-3">
-                <div class="w-10 h-10 bg-sky-100 dark:bg-sky-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <CalendarDaysIcon class="w-5 h-5 text-sky-600 dark:text-sky-400" />
+            <!-- Info Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Date & Time -->
+              <div class="flex items-start gap-3 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+                <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+                  <CalendarDaysIcon class="w-5 h-5 text-primary-600 dark:text-primary-400" />
                 </div>
-                <div class="text-left flex-1">
-                  <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Date & Time</p>
-                  <p class="font-medium text-gray-900 dark:text-white text-sm">
-                    {{ new Date(bookingData.appointmentDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
+                <div>
+                  <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-0.5">Date & Time</p>
+                  <p class="font-medium text-neutral-900 dark:text-white text-sm">
+                    {{ new Date(bookingData.appointmentDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) }}
                   </p>
-                  <p class="font-medium text-sky-600 dark:text-sky-400">{{ bookingData.appointmentTime }}</p>
+                  <p class="font-semibold text-primary-600 dark:text-primary-400">{{ bookingData.appointmentTime }}</p>
                 </div>
               </div>
-            </div>
 
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
-              <div class="flex items-start space-x-3">
-                <div class="w-10 h-10 bg-sky-100 dark:bg-sky-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <UserCircleIcon class="w-5 h-5 text-sky-600 dark:text-sky-400" />
+              <!-- Patient -->
+              <div class="flex items-start gap-3 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+                <div class="w-10 h-10 rounded-lg bg-accent-100 dark:bg-accent-900/30 flex items-center justify-center flex-shrink-0">
+                  <UserCircleIcon class="w-5 h-5 text-accent-600 dark:text-accent-400" />
                 </div>
-                <div class="text-left flex-1">
-                  <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Patient</p>
-                  <p class="font-medium text-gray-900 dark:text-white">
+                <div>
+                  <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-0.5">Patient</p>
+                  <p class="font-medium text-neutral-900 dark:text-white">
                     {{ bookingData.patientInfo?.firstName }} {{ bookingData.patientInfo?.lastName }}
                   </p>
                 </div>
               </div>
-            </div>
 
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
-              <div class="flex items-start space-x-3">
-                <div class="w-10 h-10 bg-sky-100 dark:bg-sky-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <ClipboardDocumentListIcon class="w-5 h-5 text-sky-600 dark:text-sky-400" />
+              <!-- Reason -->
+              <div class="flex items-start gap-3 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+                <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+                  <ClipboardDocumentListIcon class="w-5 h-5 text-primary-600 dark:text-primary-400" />
                 </div>
-                <div class="text-left flex-1">
-                  <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Reason for Visit</p>
-                  <p class="font-medium text-gray-900 dark:text-white">{{ bookingData.reason }}</p>
+                <div>
+                  <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-0.5">Reason</p>
+                  <p class="font-medium text-neutral-900 dark:text-white">{{ bookingData.reason }}</p>
                 </div>
               </div>
-            </div>
 
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
-              <div class="flex items-start space-x-3">
-                <div class="w-10 h-10 bg-sky-100 dark:bg-sky-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <CurrencyDollarIcon class="w-5 h-5 text-sky-600 dark:text-sky-400" />
+              <!-- Fee -->
+              <div class="flex items-start gap-3 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+                <div class="w-10 h-10 rounded-lg bg-success-100 dark:bg-success-900/30 flex items-center justify-center flex-shrink-0">
+                  <CurrencyDollarIcon class="w-5 h-5 text-success-600 dark:text-success-400" />
                 </div>
-                <div class="text-left flex-1">
-                  <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Consultation Fee</p>
-                  <p class="font-bold text-xl text-gray-900 dark:text-white">${{ doctor.consultationFee }}</p>
+                <div>
+                  <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-0.5">Consultation Fee</p>
+                  <p class="text-xl font-bold text-neutral-900 dark:text-white">${{ doctor.consultationFee }}</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </Transition>
 
         <!-- Next Steps -->
-        <div class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-left mb-10 rounded-lg p-6">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-5">Next Steps</h3>
-          <ul class="space-y-3.5 text-gray-700 dark:text-gray-300">
-            <li class="flex items-start space-x-3">
-              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-sky-600 dark:bg-sky-500 text-white font-semibold text-xs flex-shrink-0 mt-0.5">1</span>
-              <span class="leading-relaxed">Check your email for the confirmation message with appointment details</span>
-            </li>
-            <li class="flex items-start space-x-3">
-              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-sky-600 dark:bg-sky-500 text-white font-semibold text-xs flex-shrink-0 mt-0.5">2</span>
-              <span class="leading-relaxed">Arrive 15 minutes early to complete any necessary paperwork</span>
-            </li>
-            <li class="flex items-start space-x-3">
-              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-sky-600 dark:bg-sky-500 text-white font-semibold text-xs flex-shrink-0 mt-0.5">3</span>
-              <span class="leading-relaxed">Bring a valid ID and your insurance card if applicable</span>
-            </li>
-            <li class="flex items-start space-x-3">
-              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-sky-600 dark:bg-sky-500 text-white font-semibold text-xs flex-shrink-0 mt-0.5">4</span>
-              <span class="leading-relaxed">If you need to cancel or reschedule, please contact us at least 24 hours in advance</span>
-            </li>
-          </ul>
-        </div>
+        <Transition
+          enter-active-class="transition-all duration-500 ease-smooth delay-200"
+          enter-from-class="opacity-0 translate-y-4"
+        >
+          <div v-if="showContent" class="card p-6 sm:p-8 mb-8 bg-primary-50 dark:bg-primary-900/10 border-primary-200 dark:border-primary-800">
+            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-6 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-primary-600 dark:bg-primary-500 flex items-center justify-center">
+                <MapPinIcon class="w-4 h-4 text-white" />
+              </span>
+              What's Next
+            </h3>
+
+            <div class="space-y-4">
+              <div
+                v-for="(step, index) in nextSteps"
+                :key="index"
+                class="flex items-start gap-4 p-4 rounded-xl bg-white/60 dark:bg-neutral-900/60"
+              >
+                <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center flex-shrink-0">
+                  <component :is="step.icon" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                </div>
+                <div>
+                  <p class="font-medium text-neutral-900 dark:text-white">{{ step.title }}</p>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ step.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
 
         <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button @click="backToHome" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold px-10 py-3 rounded-lg transition-colors duration-200 border border-gray-300 dark:border-gray-600">
-            Back to Home
-          </button>
-          <button @click="startNewBooking" class="bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600 text-white font-semibold px-10 py-3 rounded-lg transition-colors duration-200">
-            Book Another Appointment
-          </button>
-        </div>
+        <Transition
+          enter-active-class="transition-all duration-500 ease-smooth delay-300"
+          enter-from-class="opacity-0 translate-y-4"
+        >
+          <div v-if="showContent" class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button @click="backToHome" class="btn-secondary group">
+              <HomeIcon class="w-5 h-5" />
+              Back to Home
+            </button>
+            <button @click="startNewBooking" class="btn-primary group">
+              Book Another Appointment
+              <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
+        </Transition>
       </div>
     </div>
   </div>

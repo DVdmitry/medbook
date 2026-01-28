@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useBookingStore } from '@/stores/booking.store';
+import { ArrowRightIcon, ArrowLeftIcon, SparklesIcon } from '@heroicons/vue/24/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/vue/24/solid';
 
 const bookingStore = useBookingStore();
 
@@ -13,7 +15,6 @@ const fillWithDefaults = ref(false);
 
 const doctor = computed(() => bookingStore.selectedDoctor);
 
-// Minimum date (tomorrow)
 const minDate = computed(() => {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -55,55 +56,67 @@ function handleSubmit() {
 
 <template>
   <div class="space-y-6">
+    <!-- Header -->
     <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Select Appointment Time</h2>
-      <label class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+      <div>
+        <h2 class="text-2xl font-bold text-neutral-900 dark:text-white">Appointment Details</h2>
+        <p class="text-neutral-600 dark:text-neutral-400 mt-1 text-sm">Pick your preferred date and time</p>
+      </div>
+      <label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
         <input
           v-model="fillWithDefaults"
           type="checkbox"
-          class="w-4 h-4 text-sky-600 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 rounded focus:ring-sky-500 focus:ring-2"
+          class="form-checkbox"
         />
-        <span>Fill with default data</span>
+        <SparklesIcon class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+        <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Demo data</span>
       </label>
     </div>
 
-    <div v-if="doctor" class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 rounded-lg p-5">
-      <div class="flex items-center space-x-4">
-        <img :src="doctor.avatar" :alt="doctor.name" class="w-16 h-16 rounded-lg" />
-        <div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ doctor.name }}</h3>
-          <p class="text-sky-600 dark:text-sky-400 font-medium">{{ doctor.specialtyLabel }}</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Consultation Fee: ${{ doctor.consultationFee }}</p>
+    <!-- Doctor Card -->
+    <div v-if="doctor" class="p-4 rounded-xl bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800">
+      <div class="flex items-center gap-4">
+        <img :src="doctor.avatar" :alt="doctor.name" class="w-14 h-14 rounded-xl object-cover" />
+        <div class="flex-1">
+          <h3 class="font-semibold text-neutral-900 dark:text-white">{{ doctor.name }}</h3>
+          <p class="text-primary-600 dark:text-primary-400 font-medium text-sm">{{ doctor.specialtyLabel }}</p>
+          <div class="flex items-center gap-2 mt-1">
+            <StarIconSolid class="w-4 h-4 text-warning-500" />
+            <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ doctor.rating }}</span>
+            <span class="text-sm text-neutral-500">|</span>
+            <span class="text-sm font-semibold text-neutral-900 dark:text-white">${{ doctor.consultationFee }}</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <form @submit.prevent="handleSubmit" class="space-y-6">
-      <!-- Date Selection -->
-      <div>
-        <label class="form-label">Select Date *</label>
-        <input
-          v-model="selectedDate"
-          type="date"
-          :min="minDate"
-          required
-          class="form-input"
-        />
-      </div>
+    <form @submit.prevent="handleSubmit" class="space-y-5">
+      <!-- Date & Time Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="form-group">
+          <label class="form-label">Select Date *</label>
+          <input
+            v-model="selectedDate"
+            type="date"
+            :min="minDate"
+            required
+            class="form-input"
+          />
+        </div>
 
-      <!-- Time Selection -->
-      <div>
-        <label class="form-label">Select Time *</label>
-        <input
-          v-model="selectedTime"
-          type="time"
-          required
-          class="form-input"
-        />
+        <div class="form-group">
+          <label class="form-label">Select Time *</label>
+          <input
+            v-model="selectedTime"
+            type="time"
+            required
+            class="form-input"
+          />
+        </div>
       </div>
 
       <!-- Reason -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Reason for Visit *</label>
         <input
           v-model="reason"
@@ -115,22 +128,25 @@ function handleSubmit() {
       </div>
 
       <!-- Additional Notes -->
-      <div>
+      <div class="form-group">
         <label class="form-label">Additional Notes (optional)</label>
         <textarea
           v-model="notes"
           rows="3"
-          class="form-input"
+          class="form-input resize-y"
           placeholder="Any additional information you'd like the doctor to know..."
         />
       </div>
 
+      <!-- Action Buttons -->
       <div class="flex justify-between pt-4">
-        <button type="button" @click="emit('back')" class="btn-secondary px-8 py-3">
+        <button type="button" @click="emit('back')" class="btn-secondary group">
+          <ArrowLeftIcon class="w-5 h-5 transition-transform group-hover:-translate-x-1" />
           Back
         </button>
-        <button type="submit" class="btn-primary px-8 py-3">
+        <button type="submit" class="btn-primary group">
           Review & Confirm
+          <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
         </button>
       </div>
     </form>

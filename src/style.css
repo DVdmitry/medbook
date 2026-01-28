@@ -2,140 +2,586 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   BASE LAYER - Foundation Styles
+   ============================================ */
 @layer base {
-  * {
-    @apply transition-colors duration-200;
+  /* Root variables for dynamic theming */
+  :root {
+    --color-primary: 26 95 247;
+    --color-accent: 58 197 185;
+    --transition-fast: 150ms;
+    --transition-normal: 250ms;
+    --transition-slow: 400ms;
   }
 
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Body base styles */
   body {
-    @apply bg-gray-50 text-gray-900;
-    @apply dark:bg-gray-950 dark:text-gray-100;
+    @apply bg-neutral-50 text-neutral-900;
+    @apply dark:bg-neutral-950 dark:text-neutral-100;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  /* Dark mode color scheme */
   html.dark {
     color-scheme: dark;
   }
+
+  /* Focus visible for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+    @apply dark:ring-primary-400 dark:ring-offset-neutral-900;
+  }
+
+  /* Skip to content link for accessibility */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4;
+    @apply focus:z-100 focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white;
+    @apply focus:rounded-lg focus:font-semibold;
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-primary-500/20 text-primary-900;
+    @apply dark:bg-primary-400/30 dark:text-primary-100;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-100 dark:bg-neutral-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 dark:bg-neutral-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400 dark:bg-neutral-600;
+  }
 }
 
+/* ============================================
+   COMPONENTS LAYER - Reusable UI Components
+   ============================================ */
 @layer components {
+  /* ----------------------------------------
+     BUTTONS
+     ---------------------------------------- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply font-semibold rounded-xl;
+    @apply transition-all duration-200 ease-smooth;
+    @apply focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+    @apply active:scale-[0.98];
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .btn-md {
+    @apply px-6 py-3 text-base;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+  }
+
+  .btn-primary {
+    @apply btn btn-md;
+    @apply bg-primary-600 text-white;
+    @apply hover:bg-primary-700 hover:shadow-soft-md;
+    @apply dark:bg-primary-500 dark:hover:bg-primary-600;
+    @apply focus-visible:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply btn btn-md;
+    @apply bg-neutral-100 text-neutral-900;
+    @apply border border-neutral-200;
+    @apply hover:bg-neutral-200 hover:border-neutral-300;
+    @apply dark:bg-neutral-800 dark:text-neutral-100;
+    @apply dark:border-neutral-700 dark:hover:bg-neutral-700;
+    @apply focus-visible:ring-neutral-500;
+  }
+
+  .btn-ghost {
+    @apply btn btn-md;
+    @apply bg-transparent text-neutral-700;
+    @apply hover:bg-neutral-100;
+    @apply dark:text-neutral-300 dark:hover:bg-neutral-800;
+    @apply focus-visible:ring-neutral-500;
+  }
+
+  .btn-accent {
+    @apply btn btn-md;
+    @apply bg-accent-500 text-white;
+    @apply hover:bg-accent-600 hover:shadow-soft-md;
+    @apply dark:bg-accent-400 dark:hover:bg-accent-500 dark:text-neutral-900;
+    @apply focus-visible:ring-accent-500;
+  }
+
+  /* Button with icon only */
+  .btn-icon {
+    @apply btn p-3;
+    @apply bg-neutral-100 text-neutral-600;
+    @apply hover:bg-neutral-200 hover:text-neutral-900;
+    @apply dark:bg-neutral-800 dark:text-neutral-400;
+    @apply dark:hover:bg-neutral-700 dark:hover:text-neutral-100;
+  }
+
+  /* ----------------------------------------
+     CARDS
+     ---------------------------------------- */
+  .card {
+    @apply bg-white rounded-2xl;
+    @apply border border-neutral-200;
+    @apply shadow-soft;
+    @apply dark:bg-neutral-900 dark:border-neutral-800;
+    @apply dark:shadow-dark-soft;
+  }
+
+  .card-hover {
+    @apply card;
+    @apply transition-all duration-300 ease-smooth;
+    @apply hover:shadow-soft-lg hover:border-neutral-300 hover:-translate-y-1;
+    @apply dark:hover:border-neutral-700;
+  }
+
+  .card-interactive {
+    @apply card-hover cursor-pointer;
+    @apply hover:border-primary-500/50;
+    @apply dark:hover:border-primary-400/50;
+  }
+
   /* Glass Card - Glassmorphism effect */
   .glass-card {
-    @apply backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 rounded-2xl shadow-xl border border-white/20 dark:border-gray-800/50;
-    @apply hover:shadow-2xl hover:scale-[1.02] transition-all duration-300;
+    @apply backdrop-blur-xl rounded-2xl;
+    @apply bg-white/70 border border-white/20;
+    @apply shadow-soft-lg;
+    @apply dark:bg-neutral-900/70 dark:border-neutral-700/50;
   }
 
-  /* Glass Card Hover Effect */
   .glass-card-hover {
-    @apply backdrop-blur-xl bg-white/60 dark:bg-gray-900/60 rounded-2xl shadow-lg border border-white/20 dark:border-gray-800/50;
-    @apply hover:bg-white/80 hover:dark:bg-gray-900/80 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer;
+    @apply glass-card;
+    @apply transition-all duration-300 ease-smooth;
+    @apply hover:bg-white/80 hover:shadow-soft-xl hover:-translate-y-1;
+    @apply dark:hover:bg-neutral-900/80;
   }
 
-  /* Button Primary - Minimalist */
-  .btn-primary {
-    @apply bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-6 rounded-lg;
-    @apply transition-colors duration-200;
+  /* ----------------------------------------
+     FORM ELEMENTS
+     ---------------------------------------- */
+  .form-group {
+    @apply space-y-2;
   }
 
-  .dark .btn-primary {
-    @apply bg-sky-700 hover:bg-sky-600;
-  }
-
-  /* Button Secondary - Minimalist */
-  .btn-secondary {
-    @apply bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700;
-    @apply text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-lg;
-    @apply border border-gray-300 dark:border-gray-600;
-    @apply transition-colors duration-200;
-  }
-
-  /* Form Input - Minimalist */
-  .form-input {
-    @apply w-full px-4 py-3 bg-white dark:bg-gray-900 rounded-lg;
-    @apply border border-gray-300 dark:border-gray-700;
-    @apply focus:ring-2 focus:ring-sky-500 focus:border-transparent;
-    @apply text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400;
-    @apply transition-all duration-200;
-  }
-
-  /* Form Label - Minimalist */
   .form-label {
-    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+    @apply block text-sm font-medium;
+    @apply text-neutral-700 dark:text-neutral-300;
   }
 
-  /* Card with modern styling */
-  .card {
-    @apply glass-card p-6 animate-fade-in;
+  .form-input {
+    @apply w-full px-4 py-3 rounded-xl;
+    @apply bg-white border border-neutral-300;
+    @apply text-neutral-900 placeholder-neutral-400;
+    @apply transition-all duration-200;
+    @apply focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20;
+    @apply dark:bg-neutral-900 dark:border-neutral-700;
+    @apply dark:text-neutral-100 dark:placeholder-neutral-500;
+    @apply dark:focus:border-primary-400 dark:focus:ring-primary-400/20;
+    @apply disabled:bg-neutral-100 disabled:cursor-not-allowed;
+    @apply dark:disabled:bg-neutral-800;
   }
 
-  /* Gradient Text */
-  .gradient-text {
-    @apply bg-clip-text text-transparent font-bold;
-    background: linear-gradient(to right, #0284c7, #c026d3);
+  .form-input-error {
+    @apply form-input;
+    @apply border-error-500 focus:border-error-500 focus:ring-error-500/20;
+    @apply dark:border-error-400 dark:focus:border-error-400 dark:focus:ring-error-400/20;
   }
 
-  .dark .gradient-text {
-    background: linear-gradient(to right, #38bdf8, #e879f9);
+  .form-error {
+    @apply text-sm text-error-600 dark:text-error-400;
+    @apply flex items-center gap-1;
   }
 
-  /* Floating Animation */
-  .floating {
-    @apply animate-float;
+  .form-hint {
+    @apply text-sm text-neutral-500 dark:text-neutral-400;
   }
 
-  /* Hero Section Gradient */
-  .hero-gradient {
-    background: linear-gradient(to bottom right, #0284c7, #c026d3, #075985);
-    position: relative;
+  /* Select dropdown */
+  .form-select {
+    @apply form-input appearance-none;
+    @apply bg-no-repeat bg-right;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-size: 1.25em 1.25em;
+    padding-right: 2.5rem;
+  }
+
+  /* Textarea */
+  .form-textarea {
+    @apply form-input resize-y min-h-[100px];
+  }
+
+  /* Checkbox & Radio */
+  .form-checkbox {
+    @apply w-5 h-5 rounded;
+    @apply text-primary-600 bg-white border-neutral-300;
+    @apply focus:ring-primary-500 focus:ring-2 focus:ring-offset-0;
+    @apply dark:bg-neutral-900 dark:border-neutral-600;
+    @apply transition-colors duration-150;
+  }
+
+  .form-radio {
+    @apply form-checkbox rounded-full;
+  }
+
+  /* Checkbox card style */
+  .checkbox-card {
+    @apply p-4 rounded-xl border-2 border-neutral-200 cursor-pointer;
+    @apply transition-all duration-200;
+    @apply hover:border-neutral-300 hover:bg-neutral-50;
+    @apply dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50;
+  }
+
+  .checkbox-card-checked {
+    @apply border-primary-500 bg-primary-50;
+    @apply dark:border-primary-400 dark:bg-primary-900/20;
+  }
+
+  /* ----------------------------------------
+     BADGES & PILLS
+     ---------------------------------------- */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full;
+    @apply text-xs font-semibold;
+  }
+
+  .badge-primary {
+    @apply badge bg-primary-100 text-primary-700;
+    @apply dark:bg-primary-900/30 dark:text-primary-300;
+  }
+
+  .badge-accent {
+    @apply badge bg-accent-100 text-accent-700;
+    @apply dark:bg-accent-900/30 dark:text-accent-300;
+  }
+
+  .badge-success {
+    @apply badge bg-success-100 text-success-700;
+    @apply dark:bg-success-900/30 dark:text-success-300;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning-100 text-warning-700;
+    @apply dark:bg-warning-900/30 dark:text-warning-300;
+  }
+
+  .badge-error {
+    @apply badge bg-error-100 text-error-700;
+    @apply dark:bg-error-900/30 dark:text-error-300;
+  }
+
+  /* Filter pills */
+  .pill {
+    @apply inline-flex items-center px-4 py-2 rounded-full;
+    @apply text-sm font-medium cursor-pointer;
+    @apply transition-all duration-200;
+    @apply bg-neutral-100 text-neutral-700 border border-transparent;
+    @apply hover:bg-neutral-200;
+    @apply dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700;
+  }
+
+  .pill-active {
+    @apply bg-primary-600 text-white border-primary-600;
+    @apply hover:bg-primary-700;
+    @apply dark:bg-primary-500 dark:hover:bg-primary-600;
+  }
+
+  /* ----------------------------------------
+     SKELETON LOADERS
+     ---------------------------------------- */
+  .skeleton {
+    @apply bg-neutral-200 dark:bg-neutral-800;
+    @apply animate-pulse rounded;
+  }
+
+  .skeleton-shimmer {
+    @apply relative overflow-hidden;
+    @apply bg-neutral-200 dark:bg-neutral-800;
+    background: linear-gradient(
+      90deg,
+      theme('colors.neutral.200') 0%,
+      theme('colors.neutral.100') 50%,
+      theme('colors.neutral.200') 100%
+    );
+    background-size: 200% 100%;
+    @apply animate-skeleton;
+  }
+
+  .dark .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      theme('colors.neutral.800') 0%,
+      theme('colors.neutral.700') 50%,
+      theme('colors.neutral.800') 100%
+    );
+  }
+
+  /* ----------------------------------------
+     PROGRESS & LOADING
+     ---------------------------------------- */
+  .progress-bar {
+    @apply h-2 w-full bg-neutral-200 rounded-full overflow-hidden;
+    @apply dark:bg-neutral-800;
+  }
+
+  .progress-bar-fill {
+    @apply h-full rounded-full transition-all duration-500 ease-smooth;
+    @apply bg-gradient-to-r from-primary-500 to-accent-500;
+  }
+
+  .spinner {
+    @apply w-5 h-5 border-2 border-neutral-200 border-t-primary-600 rounded-full;
+    @apply animate-spin;
+    @apply dark:border-neutral-700 dark:border-t-primary-400;
+  }
+
+  /* ----------------------------------------
+     OVERLAYS & MODALS
+     ---------------------------------------- */
+  .overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm;
+    @apply z-50;
+  }
+
+  .modal {
+    @apply glass-card p-6 max-w-lg w-full;
+    @apply animate-scale-in;
+  }
+
+  /* ----------------------------------------
+     NAVIGATION
+     ---------------------------------------- */
+  .nav-link {
+    @apply text-neutral-600 font-medium;
+    @apply transition-colors duration-200;
+    @apply hover:text-primary-600;
+    @apply dark:text-neutral-400 dark:hover:text-primary-400;
+  }
+
+  .nav-link-active {
+    @apply text-primary-600 dark:text-primary-400;
+  }
+
+  /* ----------------------------------------
+     THEME TOGGLE
+     ---------------------------------------- */
+  .theme-toggle {
+    @apply fixed top-4 right-4 z-50;
+    @apply p-3 rounded-full;
+    @apply bg-white/90 backdrop-blur-lg border border-neutral-200;
+    @apply shadow-soft hover:shadow-soft-md;
+    @apply transition-all duration-300;
+    @apply hover:scale-110;
+    @apply dark:bg-neutral-900/90 dark:border-neutral-700;
+  }
+
+  /* ----------------------------------------
+     DIVIDERS
+     ---------------------------------------- */
+  .divider {
+    @apply border-t border-neutral-200 dark:border-neutral-800;
+  }
+
+  .divider-vertical {
+    @apply border-l border-neutral-200 dark:border-neutral-800;
+  }
+
+  /* ----------------------------------------
+     TOOLTIPS
+     ---------------------------------------- */
+  .tooltip {
+    @apply absolute z-50 px-3 py-1.5 rounded-lg;
+    @apply text-sm text-white bg-neutral-900;
+    @apply shadow-soft-md;
+    @apply animate-fade-in;
+    @apply dark:bg-neutral-100 dark:text-neutral-900;
+  }
+
+  /* ----------------------------------------
+     ALERTS
+     ---------------------------------------- */
+  .alert {
+    @apply p-4 rounded-xl border;
+    @apply flex items-start gap-3;
+  }
+
+  .alert-info {
+    @apply alert bg-primary-50 border-primary-200 text-primary-800;
+    @apply dark:bg-primary-900/20 dark:border-primary-800 dark:text-primary-200;
+  }
+
+  .alert-success {
+    @apply alert bg-success-50 border-success-200 text-success-800;
+    @apply dark:bg-success-900/20 dark:border-success-800 dark:text-success-200;
+  }
+
+  .alert-warning {
+    @apply alert bg-warning-50 border-warning-200 text-warning-800;
+    @apply dark:bg-warning-900/20 dark:border-warning-800 dark:text-warning-200;
+  }
+
+  .alert-error {
+    @apply alert bg-error-50 border-error-200 text-error-800;
+    @apply dark:bg-error-900/20 dark:border-error-800 dark:text-error-200;
+  }
+
+  /* ----------------------------------------
+     AVATAR
+     ---------------------------------------- */
+  .avatar {
+    @apply relative inline-flex items-center justify-center;
+    @apply rounded-xl overflow-hidden bg-neutral-200;
+    @apply dark:bg-neutral-800;
+  }
+
+  .avatar-sm {
+    @apply w-10 h-10;
+  }
+
+  .avatar-md {
+    @apply w-14 h-14;
+  }
+
+  .avatar-lg {
+    @apply w-20 h-20;
+  }
+
+  .avatar-ring {
+    @apply ring-2 ring-white dark:ring-neutral-900;
+    @apply ring-offset-2 ring-offset-primary-500;
+  }
+
+  /* Online status indicator */
+  .avatar-status {
+    @apply absolute bottom-0 right-0 w-3 h-3;
+    @apply rounded-full border-2 border-white;
+    @apply dark:border-neutral-900;
+  }
+
+  .avatar-status-online {
+    @apply avatar-status bg-success-500;
+  }
+
+  .avatar-status-offline {
+    @apply avatar-status bg-neutral-400;
+  }
+}
+
+/* ============================================
+   UTILITIES LAYER - Helper Classes
+   ============================================ */
+@layer utilities {
+  /* Text gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-600 to-accent-500;
+  }
+
+  .text-gradient-dark {
+    @apply bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-400 to-accent-400;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-700;
+  }
+
+  .bg-gradient-accent {
+    @apply bg-gradient-to-r from-accent-400 to-accent-600;
+  }
+
+  .bg-gradient-mixed {
+    @apply bg-gradient-to-r from-primary-600 via-accent-500 to-primary-500;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply backdrop-blur-xl bg-white/70;
+    @apply dark:bg-neutral-900/70;
+  }
+
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Truncate multiline */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  .dark .hero-gradient {
-    background: linear-gradient(to bottom right, #0ea5e9, #d946ef, #0c4a6e);
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  .hero-gradient::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-    animation: pulse 4s ease-in-out infinite;
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+  /* Stagger animation delays for children */
+  .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+  .stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+  .stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+  .stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+  .stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+  .stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+  .stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+  .stagger-children > *:nth-child(9) { animation-delay: 400ms; }
+  .stagger-children > *:nth-child(10) { animation-delay: 450ms; }
+
+  /* Safe area for mobile devices */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
   }
 
-  /* Theme Toggle Button */
-  .theme-toggle {
-    @apply fixed top-4 right-4 z-50 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80;
-    @apply p-3 rounded-full shadow-lg border border-gray-300/50 dark:border-gray-700/50;
-    @apply hover:scale-110 transition-all duration-300 cursor-pointer;
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* Progress Bar */
-  .progress-bar {
-    @apply h-2 rounded-full shadow-lg;
-    background: linear-gradient(to right, #0ea5e9, #d946ef);
-    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.5);
-    transition: width 0.3s ease-out;
-  }
-
-  .dark .progress-bar {
-    box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.5);
-  }
-
-  /* Badge with glassmorphism */
-  .badge-glass {
-    @apply backdrop-blur-xl px-4 py-2 rounded-full text-sm font-semibold;
-    background-color: rgba(14, 165, 233, 0.2);
-    color: #0369a1;
-    border: 1px solid rgba(14, 165, 233, 0.3);
-  }
-
-  .dark .badge-glass {
-    background-color: rgba(56, 189, 248, 0.2);
-    color: #7dd3fc;
-    border-color: rgba(56, 189, 248, 0.3);
+  /* Touch-friendly tap targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
   }
 }
