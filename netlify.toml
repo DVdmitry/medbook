@@ -54,8 +54,6 @@
   to = "/index.html"
   status = 200
 
+# Dev settings for netlify dev (optional)
 [dev]
-  command = "npm run dev"
-  port = 5173
   targetPort = 5173
-  autoLaunch = false

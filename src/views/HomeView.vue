@@ -1,18 +1,33 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ArrowRightIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
+import { useApi } from '@/composables/useApi';
 
 const router = useRouter();
+const { getSpecialtyCounts } = useApi();
 
-const specialties = [
-  { name: 'Cardiology', value: 'cardiologist', count: 3 },
-  { name: 'Dermatology', value: 'dermatologist', count: 2 },
-  { name: 'General Practice', value: 'general-practitioner', count: 4 },
-  { name: 'Orthopedics', value: 'orthopedic-surgeon', count: 2 },
-  { name: 'Neurology', value: 'neurologist', count: 1 },
-  { name: 'Gastroenterology', value: 'gastroenterologist', count: 2 },
-  { name: 'Pediatrics', value: 'pediatrician', count: 3 }
+const specialtyDefinitions = [
+  { name: 'Cardiology', value: 'cardiologist' },
+  { name: 'Dermatology', value: 'dermatologist' },
+  { name: 'General Practice', value: 'general-practitioner' },
+  { name: 'Orthopedics', value: 'orthopedic-surgeon' },
+  { name: 'Neurology', value: 'neurologist' },
+  { name: 'Gastroenterology', value: 'gastroenterologist' },
+  { name: 'Pediatrics', value: 'pediatrician' }
 ];
+
+const specialtyCounts = ref<Record<string, number>>({});
+
+const specialties = ref(specialtyDefinitions.map(s => ({ ...s, count: 0 })));
+
+onMounted(async () => {
+  specialtyCounts.value = await getSpecialtyCounts();
+  specialties.value = specialtyDefinitions.map(s => ({
+    ...s,
+    count: specialtyCounts.value[s.value] || 0
+  }));
+});
 
 function goToSpecialty(specialtyValue: string) {
   router.push({ path: '/doctors', query: { specialty: specialtyValue } });

@@ -65,10 +65,14 @@ export const handler: Handler = async (event) => {
     specialty: d.specialty,
     specialtyLabel: d.specialty_label,
     rating: parseFloat(d.rating),
+    reviewCount: d.review_count,
     experience: d.experience,
+    education: d.education,
+    languages: Array.isArray(d.languages)
+      ? d.languages
+      : (typeof d.languages === 'string' ? d.languages.split(',').map((l: string) => l.trim()) : []),
     consultationFee: parseFloat(d.consultation_fee),
     avatar: d.avatar,
-    nextAvailableSlot: null, // Will be calculated from slots table
   }));
 
   return jsonResponse({

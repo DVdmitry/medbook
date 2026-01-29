@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useBookingStore } from '@/stores/booking.store';
-import { doctors } from '@/data/doctors';
+import { useApi } from '@/composables/useApi';
 import { CheckIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/24/outline';
 import DoctorCard from '@/components/DoctorCard.vue';
 
@@ -19,7 +19,9 @@ import GeneralPractitionerForm from '@/components/forms/specialty/GeneralPractit
 const route = useRoute();
 const router = useRouter();
 const bookingStore = useBookingStore();
+const { getDoctorById } = useApi();
 
+const loadingDoctor = ref(true);
 const doctor = computed(() => bookingStore.selectedDoctor);
 const currentStep = computed(() => bookingStore.currentStep);
 const currentStepIndex = computed(() => bookingStore.currentStepIndex);
@@ -55,9 +57,11 @@ const stepDescriptions: Record<string, string> = {
   'confirmation': 'Review and confirm your booking'
 };
 
-onMounted(() => {
+onMounted(async () => {
   const doctorId = route.params.doctorId as string;
-  const foundDoctor = doctors.find((d) => d.id === doctorId);
+  loadingDoctor.value = true;
+
+  const foundDoctor = await getDoctorById(doctorId);
 
   if (!foundDoctor) {
     router.push('/doctors');
@@ -65,6 +69,7 @@ onMounted(() => {
   }
 
   bookingStore.setDoctor(foundDoctor);
+  loadingDoctor.value = false;
 });
 
 function handleNext() {

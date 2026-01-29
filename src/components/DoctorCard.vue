@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Doctor } from '@/types/medical.types';
-import { specialtyDescriptions } from '@/data/doctors';
+import { specialtyDescriptions } from '@/constants/specialties';
 import {
   AcademicCapIcon,
   LanguageIcon,

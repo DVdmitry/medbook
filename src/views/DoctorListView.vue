@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { doctors } from '@/data/doctors';
-import type { Specialty } from '@/types/medical.types';
+import { useApi } from '@/composables/useApi';
+import type { Doctor, Specialty } from '@/types/medical.types';
 import {
   MagnifyingGlassIcon,
   XMarkIcon,
@@ -12,20 +12,26 @@ import DoctorCard from '@/components/DoctorCard.vue';
 
 const router = useRouter();
 const route = useRoute();
+const { getDoctors, loading: apiLoading } = useApi();
+
+const doctors = ref<Doctor[]>([]);
 const selectedSpecialty = ref<Specialty | 'all'>('all');
 const searchQuery = ref('');
 const isLoading = ref(true);
 
-// Simulate loading for skeleton effect
-onMounted(() => {
+async function loadDoctors() {
+  isLoading.value = true;
+  doctors.value = await getDoctors();
+  isLoading.value = false;
+}
+
+onMounted(async () => {
   const specialtyParam = route.query.specialty as string;
   if (specialtyParam && specialtyParam !== 'all') {
     selectedSpecialty.value = specialtyParam as Specialty;
   }
 
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 500);
+  await loadDoctors();
 });
 
 const specialties: Array<{ value: Specialty | 'all'; label: string }> = [
@@ -40,7 +46,7 @@ const specialties: Array<{ value: Specialty | 'all'; label: string }> = [
 ];
 
 const filteredDoctors = computed(() => {
-  let result = doctors;
+  let result = doctors.value;
 
   if (selectedSpecialty.value !== 'all') {
     result = result.filter((d) => d.specialty === selectedSpecialty.value);
