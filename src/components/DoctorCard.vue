@@ -30,8 +30,8 @@ const emit = defineEmits<{
 <template>
   <div
     :class="[
-      'card p-4 sm:p-6',
-      interactive && variant === 'full' ? 'card-interactive' : '',
+      'bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-2xl p-5 sm:p-6',
+      interactive && variant === 'full' ? 'hover:shadow-soft-md hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 group' : '',
       variant === 'full' ? 'animate-fade-in-up' : ''
     ]"
   >
@@ -42,25 +42,26 @@ const emit = defineEmits<{
           :src="doctor.avatar"
           :alt="doctor.name"
           :class="[
-            'rounded-xl object-cover ring-2 ring-neutral-100 dark:ring-neutral-800',
-            variant === 'compact' ? 'w-14 h-14 sm:w-16 sm:h-16' : 'w-16 h-16'
+            'rounded-2xl object-cover ring-2 ring-neutral-200 dark:ring-neutral-700 transition-all duration-300',
+            variant === 'compact' ? 'w-14 h-14 sm:w-16 sm:h-16' : 'w-16 h-16',
+            interactive ? 'group-hover:ring-primary-300 dark:group-hover:ring-primary-700 group-hover:shadow-soft' : ''
           ]"
           loading="lazy"
         />
-        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-success-500 rounded-full border-2 border-white dark:border-neutral-900" />
+        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-success-500 rounded-full border-2 border-white dark:border-neutral-800 shadow-soft-sm" />
       </div>
       <div class="flex-1 min-w-0">
-        <h3 class="text-lg font-semibold text-neutral-900 dark:text-white truncate">
+        <h3 class="text-lg font-bold text-neutral-900 dark:text-white truncate group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors">
           {{ doctor.name }}
         </h3>
-        <p class="text-primary-600 dark:text-primary-400 font-medium text-sm">
+        <p class="text-primary-600 dark:text-primary-400 font-semibold text-sm">
           {{ doctor.specialtyLabel }}
         </p>
         <div class="flex items-center gap-1.5 mt-1.5">
           <div class="flex items-center">
             <StarIconSolid class="w-4 h-4 text-warning-500" />
           </div>
-          <span class="text-sm font-semibold text-neutral-900 dark:text-white">
+          <span class="text-sm font-bold text-neutral-900 dark:text-white">
             {{ doctor.rating }}
           </span>
           <template v-if="variant === 'full'">
@@ -69,10 +70,10 @@ const emit = defineEmits<{
             </span>
           </template>
           <template v-else>
-            <span class="text-neutral-300 dark:text-neutral-700">|</span>
+            <span class="text-neutral-300 dark:text-neutral-600">|</span>
             <span class="text-sm text-neutral-600 dark:text-neutral-400">{{ doctor.experience }} yrs exp</span>
-            <span class="text-neutral-300 dark:text-neutral-700">|</span>
-            <span class="text-sm font-semibold text-neutral-900 dark:text-white">${{ doctor.consultationFee }}</span>
+            <span class="text-neutral-300 dark:text-neutral-600">|</span>
+            <span class="text-sm font-bold text-neutral-900 dark:text-white">${{ doctor.consultationFee }}</span>
           </template>
         </div>
       </div>
@@ -82,23 +83,23 @@ const emit = defineEmits<{
     <template v-if="variant === 'full'">
       <!-- Doctor Info -->
       <div class="space-y-2.5 mb-5">
-        <div class="flex items-center gap-2.5 text-sm text-neutral-600 dark:text-neutral-400">
-          <div class="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center flex-shrink-0">
-            <CalendarIcon class="w-4 h-4" />
+        <div class="flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
+          <div class="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
+            <CalendarIcon class="w-4 h-4 text-neutral-500 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
           </div>
           <span>{{ doctor.experience }} years experience</span>
         </div>
 
-        <div class="flex items-center gap-2.5 text-sm text-neutral-600 dark:text-neutral-400">
-          <div class="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center flex-shrink-0">
-            <AcademicCapIcon class="w-4 h-4" />
+        <div class="flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
+          <div class="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
+            <AcademicCapIcon class="w-4 h-4 text-neutral-500 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
           </div>
           <span class="truncate">{{ doctor.education }}</span>
         </div>
 
-        <div class="flex items-center gap-2.5 text-sm text-neutral-600 dark:text-neutral-400">
-          <div class="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center flex-shrink-0">
-            <LanguageIcon class="w-4 h-4" />
+        <div class="flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
+          <div class="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
+            <LanguageIcon class="w-4 h-4 text-neutral-500 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
           </div>
           <span>{{ doctor.languages.join(', ') }}</span>
         </div>
@@ -110,16 +111,20 @@ const emit = defineEmits<{
       </p>
 
       <!-- Footer -->
-      <div class="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800">
-        <div class="flex items-center gap-1.5">
-          <CurrencyDollarIcon class="w-5 h-5 text-neutral-400" />
-          <span class="text-xl font-bold text-neutral-900 dark:text-white">${{ doctor.consultationFee }}</span>
-          <span class="text-sm text-neutral-500">/ visit</span>
+      <div class="flex items-center justify-between pt-5 border-t border-neutral-200 dark:border-neutral-700">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-accent-50 dark:bg-accent-900/30 flex items-center justify-center">
+            <CurrencyDollarIcon class="w-4 h-4 text-accent-500" />
+          </div>
+          <div>
+            <span class="text-xl font-bold text-neutral-900 dark:text-white">${{ doctor.consultationFee }}</span>
+            <span class="text-sm text-neutral-500 dark:text-neutral-400 ml-1">/ visit</span>
+          </div>
         </div>
         <button
           v-if="showBookButton"
           @click="emit('book', doctor.id)"
-          class="btn-primary btn-sm"
+          class="btn btn-sm bg-primary-600 text-white hover:bg-primary-700"
         >
           Book Now
         </button>

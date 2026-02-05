@@ -18,6 +18,8 @@ export interface Doctor {
   education: string;
   languages: string[];
   avatar: string;
+  imageUrl?: string; // Alias for avatar, used in some components
+  location?: string;
   consultationFee: number;
   availableSlots: string[];
 }
@@ -153,3 +155,50 @@ export interface AppointmentBooking {
 }
 
 export type BookingStep = 'patient-info' | 'medical-history' | 'specialty-form' | 'appointment-time' | 'confirmation';
+
+// Appointment status for patient cabinet and admin
+export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no_show';
+
+export interface Appointment {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  slotId: string | null;
+  slotDate: string;
+  slotTime: string;
+  specialty: string;
+  status: AppointmentStatus;
+  reason: string | null;
+  notes: string | null;
+  patientFirstName: string | null;
+  patientLastName: string | null;
+  patientEmail: string | null;
+  patientPhone: string | null;
+  medicalHistorySnapshot: Record<string, unknown>;
+  specialtyFormData: Record<string, unknown>;
+  cancelledAt: string | null;
+  cancelledBy: string | null;
+  cancellationReason: string | null;
+  confirmationNumber: string | null;
+  createdAt: string;
+  updatedAt: string;
+  // Joined data
+  doctor?: Doctor;
+}
+
+export interface AppointmentFilters {
+  status?: AppointmentStatus | null;
+  doctorId?: string | null;
+  patientId?: string | null;
+  dateFrom?: string | null;
+  dateTo?: string | null;
+  search?: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}

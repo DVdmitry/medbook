@@ -1,6 +1,6 @@
 # MedBook + Typelessity Integration Progress
 
-## Текущий статус: В работе
+## Текущий статус: Реализация завершена, готово к тестированию
 
 ---
 
@@ -63,59 +63,59 @@ User: "Мне нужен кардиолог"
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.1 | Создать EnrichmentConfig, EnrichmentResult типы | ⬜ TODO | `packages/shared/src/types/enrichment.ts` |
-| 2.2 | Добавить `enrichments?: EnrichmentConfig[]` в WidgetConfig | ⬜ TODO | `packages/shared/src/types/widget-config.ts` |
-| 2.3 | Добавить `enrichmentData?: Record<string, EnrichmentResult>` в Session | ⬜ TODO | `packages/shared/src/types/session.ts` |
-| 2.4 | Экспорт enrichment типов | ⬜ TODO | `packages/shared/src/types/index.ts` |
+| 2.1 | Создать EnrichmentConfig, EnrichmentResult типы | ✅ DONE | `packages/shared/src/types/enrichment.ts` |
+| 2.2 | Добавить `enrichments?: EnrichmentConfig[]` в WidgetConfig | ✅ DONE | `packages/shared/src/types/widget-config.ts` |
+| 2.3 | Добавить `enrichmentData?: Record<string, EnrichmentResult>` в Session | ✅ DONE | `packages/shared/src/types/session.ts` |
+| 2.4 | Экспорт enrichment типов | ✅ DONE | `packages/shared/src/types/index.ts` |
 
 #### Фаза 2: Database Schema
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.5 | Добавить `enrichmentData: jsonb` в sessions | ⬜ TODO | `packages/api/src/db/schema.ts` |
-| 2.6 | Добавить `enrichments: jsonb` в widgetConfigs | ⬜ TODO | `packages/api/src/db/schema.ts` |
-| 2.7 | Drizzle migration | ⬜ TODO | SQL migration |
+| 2.5 | Добавить `enrichmentData: jsonb` в sessions | ✅ DONE | `packages/api/src/db/schema.ts` |
+| 2.6 | Добавить `enrichments: jsonb` в widgetConfigs | ✅ DONE | `packages/api/src/db/schema.ts` |
+| 2.7 | Drizzle migration | ✅ DONE | `drizzle/0004_optimal_human_robot.sql` |
 
 #### Фаза 3: Enrichment Service
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.8 | checkTriggers(), executeEnrichment(), resolveTemplate() | ⬜ TODO | `packages/api/src/services/enrichment-service/enrichment.service.ts` |
-| 2.9 | generateEnrichedResponse() — второй AI-вызов | ⬜ TODO | `packages/api/src/services/enrichment-service/enrichment-prompt.ts` |
-| 2.10 | Barrel export | ⬜ TODO | `packages/api/src/services/enrichment-service/index.ts` |
+| 2.8 | checkTriggers(), executeEnrichment(), resolveTemplate() | ✅ DONE | `packages/api/src/services/enrichment-service/enrichment.service.ts` |
+| 2.9 | generateEnrichedResponse() (интегрировано в message-handler) | ✅ DONE | Интегрировано в Фазу 4 |
+| 2.10 | Barrel export | ✅ DONE | `packages/api/src/services/enrichment-service/index.ts` |
 
 #### Фаза 4: Message Handler Integration
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.11 | Интеграция enrichment в extractAndRespond flow | ⬜ TODO | `packages/api/src/services/session-service/message-handler.ts` |
-| 2.12 | Расширить applyAIExtraction() для enrichmentData | ⬜ TODO | `packages/api/src/services/session-helpers.ts` |
+| 2.11 | Интеграция enrichment в extractAndRespond flow | ✅ DONE | `packages/api/src/services/session-service/message-handler.ts` |
+| 2.12 | Расширить applyAIExtraction() для enrichmentData | ✅ DONE | `packages/api/src/services/session-helpers.ts` |
 
 #### Фаза 5: AI Prompt с enrichment контекстом
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.13 | buildEnrichmentContext() в system prompt | ⬜ TODO | `packages/api/src/services/extraction-prompts/system-prompt.ts` |
-| 2.14 | Добавить `enrichmentData?` в ExtractAndRespondOptions | ⬜ TODO | `packages/api/src/services/ai-service/ai.service.ts` |
-| 2.15 | Передать enrichmentData в buildSystemPrompt() | ⬜ TODO | `packages/api/src/services/ai-service/extraction-pipeline.ts` |
+| 2.13 | buildEnrichmentContext() в system prompt | ✅ DONE | `packages/api/src/services/extraction-prompts/system-prompt.ts` |
+| 2.14 | Добавить `enrichmentData?` в ExtractAndRespondOptions | ✅ DONE | `packages/api/src/services/ai-service/ai.service.ts` |
+| 2.15 | Передать enrichmentData в buildSystemPrompt() | ✅ DONE | `packages/api/src/services/ai-service/extraction-pipeline.ts` |
 
 #### Фаза 6: Field Mapper
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.16 | setNestedValue() для dot-notation (`patient.firstName`) | ⬜ TODO | `packages/api/src/lib/field-mapper.ts` |
+| 2.16 | setNestedValue() для dot-notation (`patient.firstName`) | ✅ DONE | `packages/api/src/lib/field-mapper.ts` |
 
 #### Фаза 7: Repository
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.17 | Маппинг enrichmentData из/в БД | ⬜ TODO | `packages/api/src/repositories/session.repository.ts` |
+| 2.17 | Маппинг enrichmentData из/в БД | ✅ DONE | Автоматически через Drizzle JSONB |
 
 #### Фаза 8: MedBook Widget Config
 
 | # | Задача | Статус | Файл |
 |---|--------|--------|------|
-| 2.18 | Seed WidgetConfig для MedBook в Typelessity DB | ⬜ TODO | Seed script |
+| 2.18 | Seed WidgetConfig для MedBook в Typelessity DB | ✅ DONE | `packages/api/src/scripts/seed-medbook.ts` |
 
 ---
 
@@ -191,3 +191,27 @@ enrichments: [
 |------|-----------|
 | 2026-01-29 | Создан план. Обнаружено: фронтенд использует моки вместо API |
 | 2026-01-29 | **Часть 1 ЗАВЕРШЕНА:** Фронтенд MedBook теперь загружает данные из API/БД |
+| 2026-01-29 | **Часть 2 ЗАВЕРШЕНА:** Typelessity Enrichment Hooks полностью реализованы |
+
+---
+
+## Следующие шаги
+
+1. **Запустить миграцию БД в Typelessity Supabase:**
+   ```bash
+   cd /typelessity/packages/api
+   pnpm run db:migrate
+   ```
+
+2. **Создать MedBook конфиг в Typelessity:**
+   ```bash
+   cd /typelessity/packages/api
+   pnpm run seed:medbook
+   ```
+
+3. **E2E тест полного флоу:**
+   - "I need a cardiologist" → enrichment → список врачей
+   - Выбор врача → запрос даты → enrichment → слоты
+   - Выбор слота → сбор данных пациента → booking
+
+4. **Интеграция виджета в MedBook фронтенд**

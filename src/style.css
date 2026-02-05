@@ -392,7 +392,8 @@
      THEME TOGGLE
      ---------------------------------------- */
   .theme-toggle {
-    @apply fixed top-4 right-4 z-50;
+    @apply fixed right-4 z-50;
+    top: 10px;
     @apply p-3 rounded-full;
     @apply bg-white/90 backdrop-blur-lg border border-neutral-200;
     @apply shadow-soft hover:shadow-soft-md;

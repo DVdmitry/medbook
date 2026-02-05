@@ -1,5 +1,11 @@
 import { ref } from 'vue';
-import type { Doctor, Specialty } from '@/types/medical.types';
+import type {
+  Doctor,
+  Specialty,
+  BasePatientInfo,
+  MedicalHistory,
+  SpecialtyFormData,
+} from '@/types/medical.types';
 
 const API_BASE = '/api';
 
@@ -18,6 +24,52 @@ interface SlotsResponse {
   slots: Slot[];
   date: string;
   doctorId: string;
+}
+
+// Appointment creation request
+interface CreateAppointmentRequest {
+  doctorId: string;
+  slotId?: string;
+  slotDate: string;
+  slotStartTime: string;
+  specialty: string;
+  patient: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone?: string;
+    dateOfBirth?: string;
+    gender?: 'male' | 'female' | 'other';
+    address?: string;
+    emergencyContact?: string;
+    emergencyPhone?: string;
+  };
+  medicalHistory?: Partial<MedicalHistory>;
+  specialtyFormData?: Partial<SpecialtyFormData>;
+  reason: string;
+  notes?: string;
+}
+
+// Appointment creation response
+interface CreateAppointmentResponse {
+  appointmentId: string;
+  confirmationNumber: string;
+  status: string;
+  message: string;
+  details: {
+    doctor: {
+      name: string;
+      specialty: string;
+    };
+    patient: {
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    dateTime: string;
+    duration: number;
+    consultationFee: number;
+  };
 }
 
 export function useApi() {
@@ -115,6 +167,38 @@ export function useApi() {
     }
   }
 
+  async function createAppointment(
+    request: CreateAppointmentRequest
+  ): Promise<CreateAppointmentResponse | null> {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const response = await fetch(`${API_BASE}/appointments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Idempotency-Key': `${request.patient.email}-${request.slotDate}-${request.slotStartTime}-${Date.now()}`,
+        },
+        body: JSON.stringify(request),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed to create appointment: ${response.status}`);
+      }
+
+      const data: CreateAppointmentResponse = await response.json();
+      return data;
+    } catch (e) {
+      error.value = e instanceof Error ? e.message : 'Unknown error';
+      console.error('Error creating appointment:', e);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
   return {
     loading,
     error,
@@ -122,5 +206,6 @@ export function useApi() {
     getDoctorById,
     getDoctorSlots,
     getSpecialtyCounts,
+    createAppointment,
   };
 }

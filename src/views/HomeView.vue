@@ -1,507 +1,415 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { ArrowRightIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
+import { RouterLink, useRouter } from 'vue-router';
+import {
+  CalendarIcon,
+  UserGroupIcon,
+  ShieldCheckIcon,
+  ClockIcon,
+  ArrowRightIcon,
+} from '@heroicons/vue/24/outline';
+import { StarIcon as StarSolid } from '@heroicons/vue/24/solid';
 import { useApi } from '@/composables/useApi';
 
 const router = useRouter();
 const { getSpecialtyCounts } = useApi();
 
 const specialtyDefinitions = [
-  { name: 'Cardiology', value: 'cardiologist' },
-  { name: 'Dermatology', value: 'dermatologist' },
-  { name: 'General Practice', value: 'general-practitioner' },
-  { name: 'Orthopedics', value: 'orthopedic-surgeon' },
-  { name: 'Neurology', value: 'neurologist' },
-  { name: 'Gastroenterology', value: 'gastroenterologist' },
-  { name: 'Pediatrics', value: 'pediatrician' }
+  { name: 'Cardiology', value: 'cardiologist', icon: '❤️' },
+  { name: 'Dermatology', value: 'dermatologist', icon: '✨' },
+  { name: 'General', value: 'general-practitioner', icon: '🩺' },
+  { name: 'Orthopedics', value: 'orthopedic-surgeon', icon: '🦴' },
+  { name: 'Neurology', value: 'neurologist', icon: '🧠' },
+  { name: 'Pediatrics', value: 'pediatrician', icon: '👶' },
 ];
-
-const specialtyCounts = ref<Record<string, number>>({});
 
 const specialties = ref(specialtyDefinitions.map(s => ({ ...s, count: 0 })));
 
 onMounted(async () => {
-  specialtyCounts.value = await getSpecialtyCounts();
+  const counts = await getSpecialtyCounts();
   specialties.value = specialtyDefinitions.map(s => ({
     ...s,
-    count: specialtyCounts.value[s.value] || 0
+    count: counts[s.value] || 0
   }));
 });
 
 function goToSpecialty(specialtyValue: string) {
   router.push({ path: '/doctors', query: { specialty: specialtyValue } });
 }
+
+const featuredDoctors = [
+  {
+    name: 'Dr. Sarah Mitchell',
+    specialty: 'Cardiologist',
+    rating: 4.9,
+    reviews: 127,
+    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=face',
+    available: true,
+  },
+  {
+    name: 'Dr. James Chen',
+    specialty: 'Neurologist',
+    rating: 4.8,
+    reviews: 98,
+    image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop&crop=face',
+    available: true,
+  },
+  {
+    name: 'Dr. Emily Rodriguez',
+    specialty: 'Dermatologist',
+    rating: 4.9,
+    reviews: 156,
+    image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop&crop=face',
+    available: false,
+  },
+];
+
+const stats = [
+  { value: '50+', label: 'Expert Doctors', icon: UserGroupIcon },
+  { value: '10k+', label: 'Happy Patients', icon: StarSolid },
+  { value: '24/7', label: 'Support Available', icon: ClockIcon },
+  { value: '99%', label: 'Satisfaction Rate', icon: ShieldCheckIcon },
+];
 </script>
 
 <template>
-  <div>
+  <div class="min-h-screen bg-white dark:bg-neutral-950">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-white dark:bg-neutral-950 min-h-[90vh] flex items-center">
-      <!-- Background Elements -->
-      <div class="absolute inset-0 bg-mesh-light dark:bg-mesh-dark opacity-40" />
-      <div class="absolute top-20 left-10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl animate-float" />
-      <div class="absolute bottom-20 right-10 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-float" style="animation-delay: 1.5s;" />
-
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <!-- Left Content -->
-          <div class="text-center lg:text-left">
+    <section class="relative overflow-hidden bg-mesh-light dark:bg-mesh-dark">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-24 lg:pt-20 lg:pb-32">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <!-- Left: Content -->
+          <div class="relative z-10 animate-fade-in-up">
             <!-- Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 mb-6 animate-fade-in-down">
-              <span class="w-2 h-2 bg-success-500 rounded-full animate-pulse" />
-              <span class="text-sm font-medium text-primary-700 dark:text-primary-300">Trusted by 10,000+ patients</span>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-semibold mb-8">
+              <span class="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+              Trusted by 10,000+ patients
             </div>
 
-            <!-- Heading -->
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up leading-tight">
-              <span class="text-neutral-900 dark:text-white">Your Health,</span><br />
-              <span class="text-gradient dark:text-gradient-dark">Our Priority</span>
+            <!-- Headline -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-tight mb-6">
+              Your wellness
+              <span class="relative inline-block">
+                <span class="relative z-10 text-primary-600 dark:text-primary-400">journey</span>
+                <svg class="absolute -bottom-2 left-0 w-full h-4 text-accent-400" viewBox="0 0 200 12" preserveAspectRatio="none">
+                  <path d="M0,8 Q50,0 100,8 T200,8" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <br/>starts here
             </h1>
 
-            <!-- Subheading -->
-            <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed animate-fade-in-up" style="animation-delay: 100ms;">
-              Connect with top healthcare professionals and book appointments in minutes. Quality medical care is just a click away.
+            <p class="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed mb-10 max-w-lg">
+              Connect with trusted healthcare professionals who care about your well-being. Book appointments in seconds, not hours.
             </p>
 
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up" style="animation-delay: 200ms;">
-              <button
-                @click="router.push('/doctors')"
-                class="btn-primary btn-lg group"
+            <!-- CTAs -->
+            <div class="flex flex-wrap gap-4 mb-12">
+              <RouterLink
+                to="/doctors"
+                class="btn btn-lg bg-primary-600 text-white hover:bg-primary-700 shadow-soft hover:shadow-glow-primary group"
               >
                 Find a Doctor
-                <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </button>
-              <button class="btn-secondary btn-lg">
-                How It Works
-              </button>
+                <ArrowRightIcon class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </RouterLink>
+              <RouterLink
+                to="/cabinet"
+                class="btn btn-lg border-2 border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+              >
+                My Appointments
+              </RouterLink>
             </div>
 
-            <!-- Trust Indicators -->
-            <div class="flex flex-wrap justify-center lg:justify-start gap-6 mt-10 animate-fade-in-up" style="animation-delay: 300ms;">
-              <div class="flex items-center gap-2">
-                <CheckCircleIcon class="w-5 h-5 text-success-500" />
-                <span class="text-sm text-neutral-600 dark:text-neutral-400">Verified Doctors</span>
+            <!-- Trust indicators -->
+            <div class="flex items-center gap-6">
+              <div class="flex -space-x-3">
+                <img
+                  v-for="i in 4"
+                  :key="i"
+                  :src="`https://i.pravatar.cc/80?img=${i + 10}`"
+                  :alt="`Patient ${i}`"
+                  class="w-10 h-10 rounded-full border-2 border-white dark:border-neutral-900 object-cover"
+                />
               </div>
-              <div class="flex items-center gap-2">
-                <CheckCircleIcon class="w-5 h-5 text-success-500" />
-                <span class="text-sm text-neutral-600 dark:text-neutral-400">Secure Booking</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <CheckCircleIcon class="w-5 h-5 text-success-500" />
-                <span class="text-sm text-neutral-600 dark:text-neutral-400">24/7 Support</span>
+              <div>
+                <div class="flex items-center gap-1 text-warning-500">
+                  <StarSolid class="w-4 h-4" />
+                  <StarSolid class="w-4 h-4" />
+                  <StarSolid class="w-4 h-4" />
+                  <StarSolid class="w-4 h-4" />
+                  <StarSolid class="w-4 h-4" />
+                </div>
+                <p class="text-sm text-neutral-500 dark:text-neutral-400">Rated 4.9/5 by our patients</p>
               </div>
             </div>
           </div>
 
-          <!-- Right Image -->
-          <div class="relative animate-fade-in-up" style="animation-delay: 200ms;">
-            <!-- Main Image -->
-            <div class="relative z-10">
-              <img
-                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&h=700&fit=crop&crop=faces"
-                alt="Professional doctor"
-                class="w-full max-w-lg mx-auto rounded-3xl shadow-soft-xl object-cover"
-                loading="eager"
-              />
-              <!-- Decorative gradient overlay -->
-              <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-primary-900/20 to-transparent" />
-            </div>
+          <!-- Right: Visual -->
+          <div class="relative animate-fade-in" style="animation-delay: 200ms">
+            <!-- Main image container -->
+            <div class="relative">
+              <!-- Background shape -->
+              <div class="absolute inset-0 bg-gradient-to-br from-primary-200 to-accent-200 dark:from-primary-900/50 dark:to-accent-900/50 rounded-[3rem] rotate-3 scale-105"></div>
 
-            <!-- Floating Cards -->
-            <div class="absolute -left-4 lg:-left-8 top-1/4 z-20 animate-float" style="animation-delay: 0.5s;">
-              <div class="glass-card p-4 shadow-soft-lg">
+              <!-- Image -->
+              <div class="relative rounded-[2.5rem] overflow-hidden shadow-soft-xl">
+                <img
+                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&h=700&fit=crop&crop=faces"
+                  alt="Healthcare professional"
+                  class="w-full h-[400px] lg:h-[500px] object-cover"
+                />
+                <!-- Overlay gradient -->
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/30 to-transparent"></div>
+              </div>
+
+              <!-- Floating card - Appointment -->
+              <div class="absolute -bottom-6 -left-6 bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-soft-lg border border-neutral-200 dark:border-neutral-700 animate-float">
                 <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 rounded-xl bg-success-100 dark:bg-success-900/30 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-success-600 dark:text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                  <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                    <CalendarIcon class="w-6 h-6 text-primary-600 dark:text-primary-400" />
                   </div>
                   <div>
-                    <p class="font-semibold text-neutral-900 dark:text-white">50+</p>
-                    <p class="text-sm text-neutral-500 dark:text-neutral-400">Specialists</p>
+                    <p class="text-sm font-semibold text-neutral-900 dark:text-white">Next Available</p>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Today at 2:30 PM</p>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="absolute -right-4 lg:-right-8 bottom-1/4 z-20 animate-float" style="animation-delay: 1s;">
-              <div class="glass-card p-4 shadow-soft-lg">
-                <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 rounded-xl bg-warning-100 dark:bg-warning-900/30 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-warning-600 dark:text-warning-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
+              <!-- Floating card - Rating -->
+              <div class="absolute -top-4 -right-4 bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-soft-lg border border-neutral-200 dark:border-neutral-700 animate-float" style="animation-delay: 1s">
+                <div class="flex items-center gap-2">
+                  <div class="flex text-warning-400">
+                    <StarSolid class="w-5 h-5" />
+                    <StarSolid class="w-5 h-5" />
+                    <StarSolid class="w-5 h-5" />
+                    <StarSolid class="w-5 h-5" />
+                    <StarSolid class="w-5 h-5" />
                   </div>
-                  <div>
-                    <p class="font-semibold text-neutral-900 dark:text-white">4.9/5</p>
-                    <p class="text-sm text-neutral-500 dark:text-neutral-400">Rating</p>
-                  </div>
+                  <span class="text-sm font-bold text-neutral-900 dark:text-white">4.9</span>
                 </div>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">10,000+ reviews</p>
               </div>
             </div>
-
-            <!-- Background decorative elements -->
-            <div class="absolute -z-10 top-8 right-8 w-full h-full rounded-3xl bg-gradient-to-br from-primary-200 to-accent-200 dark:from-primary-900/50 dark:to-accent-900/50" />
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="py-20 md:py-28 bg-neutral-50 dark:bg-neutral-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section Header -->
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-            Why Choose <span class="text-gradient dark:text-gradient-dark">MedBook</span>?
-          </h2>
-          <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-            Experience healthcare booking designed for the modern patient
-          </p>
-        </div>
+    <!-- Stats Section -->
+    <section class="relative py-20 overflow-hidden bg-gradient-to-br from-primary-50 via-white to-accent-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900">
+      <!-- Decorative blobs -->
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary-400/20 dark:bg-primary-500/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-400/20 dark:bg-accent-500/10 rounded-full blur-3xl"></div>
 
-        <!-- Features Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <!-- Feature 1 - Wide Selection -->
-          <div class="card-hover p-6 text-center group">
-            <div class="w-20 h-20 mx-auto mb-6 relative">
-              <svg viewBox="0 0 80 80" class="w-full h-full">
-                <!-- Background circle -->
-                <circle cx="40" cy="40" r="38" class="fill-primary-100 dark:fill-primary-900/30" />
-                <!-- Doctor figures -->
-                <g class="transform transition-transform group-hover:scale-105 origin-center">
-                  <!-- Person 1 -->
-                  <circle cx="28" cy="30" r="8" class="fill-primary-500" />
-                  <path d="M20 52 C20 44 36 44 36 52 L36 56 L20 56 Z" class="fill-primary-500" />
-                  <!-- Person 2 -->
-                  <circle cx="52" cy="30" r="8" class="fill-accent-500" />
-                  <path d="M44 52 C44 44 60 44 60 52 L60 56 L44 56 Z" class="fill-accent-500" />
-                  <!-- Stethoscope icon -->
-                  <circle cx="40" cy="46" r="4" class="fill-none stroke-primary-600 dark:stroke-primary-400" stroke-width="2" />
-                  <path d="M40 50 L40 58" class="stroke-primary-600 dark:stroke-primary-400" stroke-width="2" stroke-linecap="round" />
-                </g>
-              </svg>
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            v-for="(stat, index) in stats"
+            :key="stat.label"
+            class="text-center p-6 rounded-2xl bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1 animate-fade-in-up"
+            :style="{ animationDelay: `${index * 100}ms` }"
+          >
+            <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-soft">
+              <component :is="stat.icon" class="w-6 h-6 text-white" />
             </div>
-            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-2">Wide Selection</h3>
-            <p class="text-neutral-600 dark:text-neutral-400 text-sm">
-              Choose from 50+ specialists across all medical fields
-            </p>
-          </div>
-
-          <!-- Feature 2 - Easy Booking -->
-          <div class="card-hover p-6 text-center group">
-            <div class="w-20 h-20 mx-auto mb-6 relative">
-              <svg viewBox="0 0 80 80" class="w-full h-full">
-                <circle cx="40" cy="40" r="38" class="fill-accent-100 dark:fill-accent-900/30" />
-                <g class="transform transition-transform group-hover:scale-105 origin-center">
-                  <!-- Calendar -->
-                  <rect x="18" y="22" width="44" height="38" rx="4" class="fill-white dark:fill-neutral-800 stroke-accent-500" stroke-width="2" />
-                  <rect x="18" y="22" width="44" height="12" rx="4" class="fill-accent-500" />
-                  <!-- Calendar dots -->
-                  <circle cx="28" cy="28" r="2" class="fill-white" />
-                  <circle cx="52" cy="28" r="2" class="fill-white" />
-                  <!-- Calendar lines -->
-                  <line x1="26" y1="42" x2="38" y2="42" class="stroke-neutral-300 dark:stroke-neutral-600" stroke-width="2" stroke-linecap="round" />
-                  <line x1="26" y1="50" x2="46" y2="50" class="stroke-neutral-300 dark:stroke-neutral-600" stroke-width="2" stroke-linecap="round" />
-                  <!-- Checkmark -->
-                  <circle cx="54" cy="48" r="10" class="fill-success-500" />
-                  <path d="M50 48 L53 51 L59 45" class="stroke-white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                </g>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-2">Easy Booking</h3>
-            <p class="text-neutral-600 dark:text-neutral-400 text-sm">
-              Book appointments in under 3 minutes with our simple form
-            </p>
-          </div>
-
-          <!-- Feature 3 - Medical Forms -->
-          <div class="card-hover p-6 text-center group">
-            <div class="w-20 h-20 mx-auto mb-6 relative">
-              <svg viewBox="0 0 80 80" class="w-full h-full">
-                <circle cx="40" cy="40" r="38" class="fill-primary-100 dark:fill-primary-900/30" />
-                <g class="transform transition-transform group-hover:scale-105 origin-center">
-                  <!-- Clipboard -->
-                  <rect x="22" y="18" width="36" height="48" rx="3" class="fill-white dark:fill-neutral-800 stroke-primary-500" stroke-width="2" />
-                  <rect x="30" y="14" width="20" height="8" rx="2" class="fill-primary-500" />
-                  <!-- Lines -->
-                  <line x1="28" y1="32" x2="52" y2="32" class="stroke-neutral-300 dark:stroke-neutral-600" stroke-width="2" stroke-linecap="round" />
-                  <line x1="28" y1="40" x2="48" y2="40" class="stroke-neutral-300 dark:stroke-neutral-600" stroke-width="2" stroke-linecap="round" />
-                  <line x1="28" y1="48" x2="44" y2="48" class="stroke-neutral-300 dark:stroke-neutral-600" stroke-width="2" stroke-linecap="round" />
-                  <!-- Medical cross -->
-                  <rect x="44" y="52" width="12" height="4" rx="1" class="fill-error-500" />
-                  <rect x="48" y="48" width="4" height="12" rx="1" class="fill-error-500" />
-                </g>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-2">Smart Forms</h3>
-            <p class="text-neutral-600 dark:text-neutral-400 text-sm">
-              Specialty-specific forms help doctors prepare for your visit
-            </p>
-          </div>
-
-          <!-- Feature 4 - Secure -->
-          <div class="card-hover p-6 text-center group">
-            <div class="w-20 h-20 mx-auto mb-6 relative">
-              <svg viewBox="0 0 80 80" class="w-full h-full">
-                <circle cx="40" cy="40" r="38" class="fill-accent-100 dark:fill-accent-900/30" />
-                <g class="transform transition-transform group-hover:scale-105 origin-center">
-                  <!-- Shield -->
-                  <path d="M40 16 L56 24 L56 40 C56 52 40 62 40 62 C40 62 24 52 24 40 L24 24 Z" class="fill-accent-500" />
-                  <!-- Inner shield -->
-                  <path d="M40 22 L52 28 L52 40 C52 48 40 56 40 56 C40 56 28 48 28 40 L28 28 Z" class="fill-white dark:fill-neutral-800" />
-                  <!-- Checkmark -->
-                  <path d="M34 40 L38 44 L48 34" class="stroke-accent-600 dark:stroke-accent-400" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                </g>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-2">Secure & Private</h3>
-            <p class="text-neutral-600 dark:text-neutral-400 text-sm">
-              Your health data is protected with enterprise-grade security
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="py-20 md:py-28 bg-white dark:bg-neutral-950 relative overflow-hidden">
-      <!-- Background decoration -->
-      <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary-50 to-transparent dark:from-primary-950/20 dark:to-transparent" />
-
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section Header -->
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-            How It Works
-          </h2>
-          <p class="text-lg text-neutral-600 dark:text-neutral-400">
-            Three simple steps to better healthcare
-          </p>
-        </div>
-
-        <!-- Steps -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          <!-- Step 1 -->
-          <div class="relative text-center">
-            <div class="w-32 h-32 mx-auto mb-6">
-              <svg viewBox="0 0 120 120" class="w-full h-full">
-                <!-- Background -->
-                <circle cx="60" cy="60" r="58" class="fill-primary-50 dark:fill-primary-900/20" />
-                <!-- Search/Browse illustration -->
-                <g>
-                  <!-- Browser window -->
-                  <rect x="25" y="30" width="70" height="55" rx="6" class="fill-white dark:fill-neutral-800 stroke-primary-300 dark:stroke-primary-700" stroke-width="2" />
-                  <rect x="25" y="30" width="70" height="14" rx="6" class="fill-primary-100 dark:fill-primary-800" />
-                  <circle cx="34" cy="37" r="3" class="fill-error-400" />
-                  <circle cx="44" cy="37" r="3" class="fill-warning-400" />
-                  <circle cx="54" cy="37" r="3" class="fill-success-400" />
-                  <!-- Doctor cards -->
-                  <rect x="32" y="52" width="24" height="26" rx="3" class="fill-primary-100 dark:fill-primary-900/50" />
-                  <circle cx="44" cy="60" r="6" class="fill-primary-300 dark:fill-primary-700" />
-                  <rect x="36" y="70" width="16" height="3" rx="1" class="fill-primary-300 dark:fill-primary-700" />
-                  <rect x="64" y="52" width="24" height="26" rx="3" class="fill-accent-100 dark:fill-accent-900/50" />
-                  <circle cx="76" cy="60" r="6" class="fill-accent-300 dark:fill-accent-700" />
-                  <rect x="68" y="70" width="16" height="3" rx="1" class="fill-accent-300 dark:fill-accent-700" />
-                </g>
-                <!-- Magnifying glass -->
-                <g class="transform translate-x-2 translate-y-2">
-                  <circle cx="85" cy="85" r="12" class="fill-none stroke-primary-500" stroke-width="3" />
-                  <line x1="93" y1="93" x2="102" y2="102" class="stroke-primary-500" stroke-width="3" stroke-linecap="round" />
-                </g>
-              </svg>
-            </div>
-            <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-600 text-white font-bold mb-4">1</div>
-            <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-2">Choose Your Doctor</h3>
-            <p class="text-neutral-600 dark:text-neutral-400">
-              Browse our network of verified specialists and find the perfect match for your needs
-            </p>
-            <!-- Arrow to next -->
-            <div class="hidden md:block absolute top-16 -right-6 lg:-right-10">
-              <svg class="w-12 h-12 text-primary-300 dark:text-primary-700" viewBox="0 0 48 48">
-                <path d="M8 24 L36 24 M28 16 L36 24 L28 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-          </div>
-
-          <!-- Step 2 -->
-          <div class="relative text-center">
-            <div class="w-32 h-32 mx-auto mb-6">
-              <svg viewBox="0 0 120 120" class="w-full h-full">
-                <circle cx="60" cy="60" r="58" class="fill-accent-50 dark:fill-accent-900/20" />
-                <!-- Form illustration -->
-                <g>
-                  <!-- Clipboard -->
-                  <rect x="30" y="20" width="60" height="80" rx="6" class="fill-white dark:fill-neutral-800 stroke-accent-300 dark:stroke-accent-700" stroke-width="2" />
-                  <rect x="42" y="14" width="36" height="12" rx="4" class="fill-accent-500" />
-                  <!-- Form fields -->
-                  <rect x="38" y="36" width="44" height="8" rx="2" class="fill-neutral-100 dark:fill-neutral-700" />
-                  <rect x="38" y="50" width="44" height="8" rx="2" class="fill-neutral-100 dark:fill-neutral-700" />
-                  <rect x="38" y="64" width="30" height="8" rx="2" class="fill-neutral-100 dark:fill-neutral-700" />
-                  <!-- Checkboxes -->
-                  <rect x="38" y="78" width="8" height="8" rx="2" class="fill-success-500" />
-                  <path d="M40 82 L43 85 L48 79" class="stroke-white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                  <rect x="50" y="80" width="24" height="4" rx="1" class="fill-neutral-200 dark:fill-neutral-600" />
-                </g>
-                <!-- Pen -->
-                <g class="transform rotate-45" style="transform-origin: 90px 90px;">
-                  <rect x="85" y="70" width="8" height="35" rx="2" class="fill-primary-500" />
-                  <polygon points="89,105 85,115 93,115" class="fill-neutral-700" />
-                </g>
-              </svg>
-            </div>
-            <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent-600 text-white font-bold mb-4">2</div>
-            <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-2">Complete Your Profile</h3>
-            <p class="text-neutral-600 dark:text-neutral-400">
-              Fill out your medical history and symptoms so your doctor can prepare
-            </p>
-            <!-- Arrow to next -->
-            <div class="hidden md:block absolute top-16 -right-6 lg:-right-10">
-              <svg class="w-12 h-12 text-accent-300 dark:text-accent-700" viewBox="0 0 48 48">
-                <path d="M8 24 L36 24 M28 16 L36 24 L28 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-          </div>
-
-          <!-- Step 3 -->
-          <div class="text-center">
-            <div class="w-32 h-32 mx-auto mb-6">
-              <svg viewBox="0 0 120 120" class="w-full h-full">
-                <circle cx="60" cy="60" r="58" class="fill-success-50 dark:fill-success-900/20" />
-                <!-- Calendar with checkmark -->
-                <g>
-                  <!-- Calendar -->
-                  <rect x="25" y="28" width="70" height="65" rx="6" class="fill-white dark:fill-neutral-800 stroke-success-300 dark:stroke-success-700" stroke-width="2" />
-                  <rect x="25" y="28" width="70" height="18" rx="6" class="fill-success-500" />
-                  <!-- Calendar binding -->
-                  <rect x="38" y="22" width="6" height="14" rx="2" class="fill-success-600" />
-                  <rect x="76" y="22" width="6" height="14" rx="2" class="fill-success-600" />
-                  <!-- Calendar grid -->
-                  <g class="fill-neutral-300 dark:fill-neutral-600">
-                    <circle cx="38" cy="56" r="4" />
-                    <circle cx="52" cy="56" r="4" />
-                    <circle cx="66" cy="56" r="4" />
-                    <circle cx="80" cy="56" r="4" />
-                    <circle cx="38" cy="72" r="4" />
-                    <circle cx="52" cy="72" r="4" />
-                  </g>
-                  <!-- Selected date -->
-                  <circle cx="66" cy="72" r="8" class="fill-success-500" />
-                  <path d="M62 72 L65 75 L71 69" class="stroke-white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                </g>
-                <!-- Notification bell -->
-                <g class="transform translate-x-2">
-                  <circle cx="88" cy="30" r="14" class="fill-warning-400" />
-                  <path d="M88 24 L88 30 L92 33" class="stroke-white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                </g>
-              </svg>
-            </div>
-            <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-success-600 text-white font-bold mb-4">3</div>
-            <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-2">Get Confirmed</h3>
-            <p class="text-neutral-600 dark:text-neutral-400">
-              Receive instant confirmation and reminders for your appointment
-            </p>
+            <p class="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-1">{{ stat.value }}</p>
+            <p class="text-neutral-600 dark:text-neutral-400 text-sm font-medium">{{ stat.label }}</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Specialties Section -->
-    <section class="py-20 md:py-28 bg-neutral-50 dark:bg-neutral-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <!-- Left - Image -->
-          <div class="relative order-2 lg:order-1">
-            <img
-              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&h=500&fit=crop"
-              alt="Medical team"
-              class="w-full rounded-3xl shadow-soft-xl"
-              loading="lazy"
-            />
-            <!-- Floating stat card -->
-            <div class="absolute -bottom-6 -right-6 lg:right-8 glass-card p-5 shadow-soft-lg animate-float">
-              <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-                  <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="text-2xl font-bold text-neutral-900 dark:text-white">7+</p>
-                  <p class="text-sm text-neutral-500 dark:text-neutral-400">Specialties</p>
+    <section class="py-24 relative bg-neutral-50 dark:bg-neutral-900">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <!-- Section header -->
+        <div class="text-center mb-16">
+          <p class="text-primary-600 dark:text-primary-400 font-semibold uppercase tracking-wide mb-3">Our Expertise</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+            Find care for every need
+          </h2>
+          <p class="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+            From routine check-ups to specialized treatments, our network of healthcare professionals covers all your medical needs.
+          </p>
+        </div>
+
+        <!-- Specialties grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <button
+            v-for="specialty in specialties"
+            :key="specialty.value"
+            @click="goToSpecialty(specialty.value)"
+            class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-2xl p-6 text-center group hover:border-primary-500 hover:shadow-soft-md transition-all duration-300 animate-fade-in-up"
+          >
+            <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+              {{ specialty.icon }}
+            </div>
+            <h3 class="font-semibold text-neutral-900 dark:text-white mb-1">{{ specialty.name }}</h3>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400">{{ specialty.count }} doctors</p>
+          </button>
+        </div>
+
+        <div class="text-center mt-12">
+          <RouterLink to="/doctors" class="btn border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900/20 group">
+            View All Specialties
+            <ArrowRightIcon class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </RouterLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Doctors Section -->
+    <section class="py-24 bg-white dark:bg-neutral-950 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <!-- Section header -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16">
+          <div>
+            <p class="text-accent-600 dark:text-accent-400 font-semibold uppercase tracking-wide mb-3">Top Rated</p>
+            <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white">
+              Meet our doctors
+            </h2>
+          </div>
+          <RouterLink to="/doctors" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium group inline-flex items-center gap-2">
+            Browse All Doctors
+            <ArrowRightIcon class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </RouterLink>
+        </div>
+
+        <!-- Doctors grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div
+            v-for="doctor in featuredDoctors"
+            :key="doctor.name"
+            class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-2xl p-6 hover:shadow-soft-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 animate-fade-in-up"
+          >
+            <div class="flex items-start gap-4 mb-4">
+              <div class="relative">
+                <img
+                  :src="doctor.image"
+                  :alt="doctor.name"
+                  class="w-20 h-20 rounded-2xl object-cover"
+                />
+                <div
+                  v-if="doctor.available"
+                  class="absolute -bottom-1 -right-1 w-5 h-5 bg-success-500 rounded-full border-2 border-white dark:border-neutral-800"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-neutral-900 dark:text-white mb-1">{{ doctor.name }}</h3>
+                <p class="text-primary-600 dark:text-primary-400 text-sm font-medium">{{ doctor.specialty }}</p>
+                <div class="flex items-center gap-2 mt-2">
+                  <div class="flex text-warning-400">
+                    <StarSolid class="w-4 h-4" />
+                  </div>
+                  <span class="text-sm font-semibold text-neutral-900 dark:text-white">{{ doctor.rating }}</span>
+                  <span class="text-sm text-neutral-500 dark:text-neutral-400">({{ doctor.reviews }} reviews)</span>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Right - Content -->
-          <div class="order-1 lg:order-2">
-            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-              Find the Right Specialist
-            </h2>
-            <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-8">
-              Our network covers all major medical specialties. Click on any specialty to browse available doctors.
-            </p>
-
-            <!-- Specialty Pills -->
-            <div class="flex flex-wrap gap-3 mb-8">
-              <button
-                v-for="specialty in specialties"
-                :key="specialty.name"
-                @click="goToSpecialty(specialty.value)"
-                class="group px-5 py-3 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-soft-md transition-all duration-300"
+            <div class="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <div>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">Next Available</p>
+                <p class="text-sm font-semibold text-neutral-900 dark:text-white">
+                  {{ doctor.available ? 'Today' : 'Tomorrow' }}
+                </p>
+              </div>
+              <RouterLink
+                to="/doctors"
+                class="btn btn-sm bg-primary-600 text-white hover:bg-primary-700"
               >
-                <div class="flex items-center gap-3">
-                  <span class="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    {{ specialty.name }}
-                  </span>
-                  <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 group-hover:bg-primary-100 group-hover:text-primary-700 dark:group-hover:bg-primary-900/30 dark:group-hover:text-primary-300 transition-colors">
-                    {{ specialty.count }}
-                  </span>
-                </div>
-              </button>
+                Book Now
+              </RouterLink>
             </div>
-
-            <button
-              @click="router.push('/doctors')"
-              class="btn-primary group"
-            >
-              View All Doctors
-              <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 md:py-28 bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600 dark:from-primary-900 dark:via-primary-950 dark:to-accent-900 relative overflow-hidden">
-      <!-- Background Pattern -->
-      <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 left-0 w-full h-full" style="background-image: radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px); background-size: 50px 50px;" />
+    <!-- How It Works Section -->
+    <section class="py-24 relative bg-neutral-50 dark:bg-neutral-900">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <!-- Section header -->
+        <div class="text-center mb-16">
+          <p class="text-primary-600 dark:text-primary-400 font-semibold uppercase tracking-wide mb-3">Simple Process</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+            How it works
+          </h2>
+          <p class="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+            Book your appointment in just a few simple steps
+          </p>
+        </div>
+
+        <!-- Steps -->
+        <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+          <!-- Step 1 -->
+          <div class="relative text-center animate-fade-in-up">
+            <div class="w-16 h-16 rounded-2xl bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+              1
+            </div>
+            <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-3">Find Your Doctor</h3>
+            <p class="text-neutral-600 dark:text-neutral-400">
+              Browse our network of qualified healthcare professionals by specialty, location, or availability.
+            </p>
+            <!-- Connector line -->
+            <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-neutral-200 dark:bg-neutral-700"></div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="relative text-center animate-fade-in-up" style="animation-delay: 150ms">
+            <div class="w-16 h-16 rounded-2xl bg-accent-100 dark:bg-accent-900/30 text-accent-600 dark:text-accent-400 flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+              2
+            </div>
+            <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-3">Choose a Time</h3>
+            <p class="text-neutral-600 dark:text-neutral-400">
+              Select a convenient time slot that fits your schedule. Same-day appointments available.
+            </p>
+            <!-- Connector line -->
+            <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-neutral-200 dark:bg-neutral-700"></div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="text-center animate-fade-in-up" style="animation-delay: 300ms">
+            <div class="w-16 h-16 rounded-2xl bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+              3
+            </div>
+            <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-3">Get Care</h3>
+            <p class="text-neutral-600 dark:text-neutral-400">
+              Receive confirmation and reminders. Show up for your appointment and focus on your health.
+            </p>
+          </div>
+        </div>
+
+        <div class="text-center mt-16">
+          <RouterLink to="/doctors" class="btn btn-lg bg-accent-600 text-white hover:bg-accent-700 shadow-soft hover:shadow-glow-accent group">
+            Get Started Today
+            <ArrowRightIcon class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </RouterLink>
+        </div>
       </div>
+    </section>
 
-      <!-- Floating elements -->
-      <div class="absolute top-10 left-10 w-20 h-20 rounded-full border-2 border-white/20 animate-float" />
-      <div class="absolute bottom-10 right-10 w-32 h-32 rounded-full border-2 border-white/10 animate-float" style="animation-delay: 1s;" />
+    <!-- CTA Section -->
+    <section class="py-24 bg-neutral-900 dark:bg-neutral-950 relative overflow-hidden">
+      <!-- Decorative elements -->
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500"></div>
+      <div class="absolute inset-0 bg-mesh-dark opacity-50"></div>
 
-      <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-          Ready to Take Care of Your Health?
+      <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
+        <h2 class="text-3xl lg:text-5xl font-bold text-white mb-6">
+          Ready to take control of your health?
         </h2>
-        <p class="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-          Join thousands of patients who trust MedBook for their healthcare needs. Your journey to better health starts here.
+        <p class="text-xl text-neutral-400 mb-10 max-w-2xl mx-auto">
+          Join thousands of patients who trust MedBook for their healthcare needs. Your wellness journey is just a click away.
         </p>
-
-        <button
-          @click="router.push('/doctors')"
-          class="btn btn-lg bg-white text-primary-700 hover:bg-neutral-100 hover:shadow-soft-lg transition-all duration-300 group"
-        >
-          Book Your Appointment
-          <ArrowRightIcon class="w-5 h-5 transition-transform group-hover:translate-x-1" />
-        </button>
+        <div class="flex flex-wrap justify-center gap-4">
+          <RouterLink to="/doctors" class="btn btn-lg bg-accent-600 text-white hover:bg-accent-700 shadow-soft hover:shadow-glow-accent group">
+            Book an Appointment
+            <ArrowRightIcon class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </RouterLink>
+          <RouterLink to="/cabinet" class="btn btn-lg border-2 border-neutral-600 text-neutral-300 hover:border-primary-500 hover:text-white">
+            View My Cabinet
+          </RouterLink>
+        </div>
       </div>
     </section>
   </div>

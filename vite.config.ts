@@ -4,7 +4,16 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          // Treat typelessity-widget as custom element (Web Component)
+          isCustomElement: (tag) => tag.startsWith('typelessity-')
+        }
+      }
+    })
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -17,6 +26,10 @@ export default defineConfig({
         changeOrigin: true,
         secure: true
       }
+    },
+    fs: {
+      // Allow serving files from typelessity widget
+      allow: ['..']
     }
   }
 })
