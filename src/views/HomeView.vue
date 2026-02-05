@@ -249,7 +249,7 @@ const stats = [
         </div>
 
         <div class="text-center mt-12">
-          <RouterLink to="/doctors" class="btn border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900/20 group">
+          <RouterLink to="/doctors" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900/20 rounded-xl font-semibold transition-all duration-200 group">
             View All Specialties
             <ArrowRightIcon class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </RouterLink>

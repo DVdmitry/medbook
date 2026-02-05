@@ -8,12 +8,21 @@
   </head>
   <body>
     <!-- AI Form Copilot Widget -->
+    <script>
+      window.aiFormCopilotConfig = {
+        position: { left: 16, bottom: 16 }
+      };
+    </script>
     <script type="module" src="https://ai-form-copilot-eu.web.app/widget-build/index.js"></script>
     <typeless-form></typeless-form>
 
     <!-- Typelessity Booking Widget -->
     <!-- Development: Local widget -->
     <script type="module" src="http://localhost:5174/src/index.ts"></script>
+    <typelessity-widget
+      config-id="00000000-0000-0000-0000-000000000011"
+      api-url="http://localhost:3000"
+    ></typelessity-widget>
 
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>

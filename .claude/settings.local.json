@@ -84,7 +84,21 @@
       "Bash(SESSION_ID=\"05e1b0db-20c1-4482-bf95-78c4a51265ae\" TOKEN=\"4cd46fa1face146455f3c5ef2280d5d8534c2868a5ccfa0ccdb970f84650fa06\" __NEW_LINE_6f097fc21aa3e954__ curl -s -X POST \"http://localhost:3000/api/session/$SESSION_ID/message\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer $TOKEN\" -d '{\"\"\"\"content\"\"\"\": \"\"\"\"Мне нужен педиатр для ребёнка\"\"\"\"}')",
       "Bash(/tmp/medbook-msg.sh:*)",
       "Bash(npm run type-check:*)",
-      "Bash(git show:*)"
+      "Bash(git show:*)",
+      "Bash(xargs:*)",
+      "Bash(SESSION_TOKEN=\"27691e1286aac54ac7c4a2afb9afcc4a75b1cbe916ae8fb66d2719f4988ec4b0\" curl -s -X POST \"http://localhost:3000/api/session/message\" -H \"Content-Type: application/json\" -H \"X-Session-Token: $SESSION_TOKEN\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Мне нужен кардиолог\"\"\"\"}')",
+      "Bash(for i in {1..10})",
+      "Bash(do curl -s -X POST \"http://localhost:3000/api/session\" -H \"Content-Type: application/json\" -d \"{\"\"configId\"\":\"\"00000000-0000-0000-0000-000000000011\"\"}\")",
+      "Bash(SID=\"e8c9e116-382a-40e6-8de0-8d156184e494\" TOK=\"35fe8e979b04ecbd74f3b5ffbfeb71a9fe453654b565d288a0a17c7f04b20e41\" __NEW_LINE_a20285e0ad19edc4__ echo \"=== TEST 2: Confused User ===\" echo \"\" echo \">>> User: I need a doctor... or maybe not... actually yes, for my heart\" curl -s -X POST \"http://localhost:3000/api/session/$SID/message\" -H \"Content-Type: application/json\" -H \"X-Session-Token: $TOK\" -d '{\"\"\"\"text\"\"\"\":\"\"\"\"I need a doctor... or maybe not... actually yes, for my heart\"\"\"\"}')",
+      "Bash(SID=\"e8c9e116-382a-40e6-8de0-8d156184e494\" TOK=\"35fe8e979b04ecbd74f3b5ffbfeb71a9fe453654b565d288a0a17c7f04b20e41\" __NEW_LINE_9b7047c3e24e7967__ echo \">>> User: Wait no, I meant skin doctor, I have a rash\" curl -s -X POST \"http://localhost:3000/api/session/$SID/message\" -H \"Content-Type: application/json\" -H \"X-Session-Token: $TOK\" -d '{\"\"\"\"text\"\"\"\":\"\"\"\"Wait no, I meant skin doctor, I have a rash\"\"\"\"}')",
+      "Bash(SID=\"e8c9e116-382a-40e6-8de0-8d156184e494\")",
+      "Bash(TOK=\"35fe8e979b04ecbd74f3b5ffbfeb71a9fe453654b565d288a0a17c7f04b20e41\")",
+      "Bash(__NEW_LINE_cccef9f1c0065654__ curl -s -X POST \"http://localhost:3000/api/session/$SID/message\" -H \"Content-Type: application/json\" -H \"X-Session-Token: $TOK\" -d '{\"\"text\"\":\"\"Wait no, I meant skin doctor, I have a rash\"\"}')",
+      "Bash(SID=\"16060292-d839-4653-8b79-f89173d92f73\" TOK=\"e4c829ec7bfbf08fae432ba10ba22cc4acd305c24048839623a2e6d8451f6bbc\" __NEW_LINE_d2a69065b0d07680__ echo \"=== TEST 3: Gibberish Input ===\" echo \"\" echo \">>> User: asdfghjkl qwerty zxcvbnm 12345\" curl -s -X POST \"http://localhost:3000/api/session/$SID/message\" -H \"Content-Type: application/json\" -H \"X-Session-Token: $TOK\" -d '{\"\"\"\"text\"\"\"\":\"\"\"\"asdfghjkl qwerty zxcvbnm 12345\"\"\"\"}')",
+      "Bash(SID=\"16060292-d839-4653-8b79-f89173d92f73\" TOK=\"e4c829ec7bfbf08fae432ba10ba22cc4acd305c24048839623a2e6d8451f6bbc\" __NEW_LINE_400aa0d76d285722__ curl -s -X POST \"http://localhost:3000/api/session/$SID/message\" -H \"Content-Type: application/json\" -H \"X-Session-Token: $TOK\" -d '{\"\"\"\"text\"\"\"\":\"\"\"\"asdfghjkl qwerty zxcvbnm 12345\"\"\"\"}')",
+      "Bash(echo \"{\"\"text\"\":\"\"I need a doctor OR 1=1; DROP TABLE appointments;--\"\"}\" curl -s -X POST http://localhost:3000/api/session/ab1502ca-8b15-4c46-b4c4-f855fc90ddd4/message -H 'Content-Type: application/json' -H 'X-Session-Token: 8751041b7c70f7a84d3e278201fe2b8adf3481f636328f9a5439f39aa19b9ef0' -d @/tmp/test_sql.json)",
+      "Bash(SID=\"bf01d1a0-710e-479a-823a-8d90744e6e33\" curl -s \"http://localhost:3000/api/session/$SID\" -H \"X-Session-Token: test\")",
+      "Bash(npm run build:api:*)"
     ],
     "deny": [],
     "ask": []
