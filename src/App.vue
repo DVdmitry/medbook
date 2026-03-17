@@ -204,6 +204,8 @@ function closeMobileMenu() {
       <RouterView />
     </main>
 
+
+
     <!-- Footer -->
     <footer
       v-if="showFooter"

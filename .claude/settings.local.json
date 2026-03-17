@@ -98,7 +98,13 @@
       "Bash(SID=\"16060292-d839-4653-8b79-f89173d92f73\" TOK=\"e4c829ec7bfbf08fae432ba10ba22cc4acd305c24048839623a2e6d8451f6bbc\" __NEW_LINE_400aa0d76d285722__ curl -s -X POST \"http://localhost:3000/api/session/$SID/message\" -H \"Content-Type: application/json\" -H \"X-Session-Token: $TOK\" -d '{\"\"\"\"text\"\"\"\":\"\"\"\"asdfghjkl qwerty zxcvbnm 12345\"\"\"\"}')",
       "Bash(echo \"{\"\"text\"\":\"\"I need a doctor OR 1=1; DROP TABLE appointments;--\"\"}\" curl -s -X POST http://localhost:3000/api/session/ab1502ca-8b15-4c46-b4c4-f855fc90ddd4/message -H 'Content-Type: application/json' -H 'X-Session-Token: 8751041b7c70f7a84d3e278201fe2b8adf3481f636328f9a5439f39aa19b9ef0' -d @/tmp/test_sql.json)",
       "Bash(SID=\"bf01d1a0-710e-479a-823a-8d90744e6e33\" curl -s \"http://localhost:3000/api/session/$SID\" -H \"X-Session-Token: test\")",
-      "Bash(npm run build:api:*)"
+      "Bash(npm run build:api:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(pnpm --filter @typelessity/widget test:e2e:*)",
+      "Bash(npm run:*)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(ps:*)",
+      "Bash(firebase functions:log:*)"
     ],
     "deny": [],
     "ask": []

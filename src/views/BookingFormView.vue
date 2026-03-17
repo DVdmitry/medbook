@@ -126,9 +126,7 @@ async function handleConfirm() {
 }
 
 function goToStep(index: number) {
-  if (index <= currentStepIndex.value) {
-    bookingStore.goToStep(bookingStore.bookingSteps[index]);
-  }
+  bookingStore.goToStep(bookingStore.bookingSteps[index]);
 }
 </script>
 
@@ -196,9 +194,7 @@ function goToStep(index: number) {
               v-for="(step, index) in bookingStore.bookingSteps"
               :key="step"
               @click="goToStep(index)"
-              :disabled="index > currentStepIndex"
-              class="relative z-10 flex flex-col items-center group"
-              :class="{ 'cursor-pointer': index <= currentStepIndex, 'cursor-not-allowed': index > currentStepIndex }"
+              class="relative z-10 flex flex-col items-center group cursor-pointer"
             >
               <div
                 class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-300"

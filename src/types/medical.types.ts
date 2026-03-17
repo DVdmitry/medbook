@@ -174,6 +174,11 @@ export interface Appointment {
   patientLastName: string | null;
   patientEmail: string | null;
   patientPhone: string | null;
+  dateOfBirth: string | null;
+  gender: string | null;
+  address: string | null;
+  emergencyContact: string | null;
+  emergencyPhone: string | null;
   medicalHistorySnapshot: Record<string, unknown>;
   specialtyFormData: Record<string, unknown>;
   cancelledAt: string | null;

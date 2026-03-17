@@ -92,6 +92,34 @@ function getDaysUntil(dateStr: string): string {
   return `In ${Math.ceil(diff / 7)} weeks`;
 }
 
+function formatCreatedAt(dateStr: string | undefined): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+/** Convert camelCase field key to human-readable label */
+function formatFieldLabel(key: string): string {
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, s => s.toUpperCase())
+    .trim();
+}
+
+/** Format field value for display (handles arrays, booleans, etc.) */
+function formatFieldValue(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  if (Array.isArray(value)) return value.join(', ');
+  return String(value);
+}
+
 function openCancelModal(apt: Appointment) {
   cancellingAppointment.value = apt;
   cancelReason.value = '';
@@ -278,9 +306,12 @@ async function confirmCancel() {
                 </span>
               </div>
 
-              <div v-if="apt.confirmationNumber" class="mt-2">
-                <span class="text-xs text-neutral-500 dark:text-neutral-400">
-                  Confirmation: {{ apt.confirmationNumber }}
+              <div class="flex flex-wrap items-center gap-3 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+                <span v-if="apt.createdAt">
+                  Booked on {{ formatCreatedAt(apt.createdAt) }}
+                </span>
+                <span v-if="apt.confirmationNumber">
+                  · #{{ apt.confirmationNumber }}
                 </span>
               </div>
             </div>
@@ -340,6 +371,9 @@ async function confirmCancel() {
                 <div>
                   <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Confirmation #</p>
                   <p class="font-mono font-semibold text-neutral-900 dark:text-white">{{ selectedAppointment.confirmationNumber || 'N/A' }}</p>
+                  <p v-if="selectedAppointment.createdAt" class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    Booked on {{ formatCreatedAt(selectedAppointment.createdAt) }}
+                  </p>
                 </div>
                 <span :class="['px-2.5 py-1 rounded-full text-xs font-semibold', getStatusColor(selectedAppointment.status)]">
                   {{ getStatusLabel(selectedAppointment.status) }}
@@ -385,32 +419,32 @@ async function confirmCancel() {
                     <p class="text-xs text-neutral-500 dark:text-neutral-400">Phone</p>
                     <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.patientPhone || 'N/A' }}</p>
                   </div>
+                  <div v-if="selectedAppointment.dateOfBirth">
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Date of Birth</p>
+                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.dateOfBirth }}</p>
+                  </div>
+                  <div v-if="selectedAppointment.gender">
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Gender</p>
+                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.gender }}</p>
+                  </div>
+                  <div v-if="selectedAppointment.address" class="col-span-2">
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Address</p>
+                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.address }}</p>
+                  </div>
                 </div>
               </div>
 
-              <!-- Medical History -->
-              <div v-if="selectedAppointment.medicalHistorySnapshot && Object.keys(selectedAppointment.medicalHistorySnapshot).length > 0" class="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-2xl space-y-3">
-                <h4 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase">Medical History</h4>
-                <div class="space-y-2">
-                  <div v-if="selectedAppointment.medicalHistorySnapshot.allergies">
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Allergies</p>
-                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.medicalHistorySnapshot.allergies }}</p>
+              <!-- Emergency Contact -->
+              <div v-if="selectedAppointment.emergencyContact || selectedAppointment.emergencyPhone" class="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-2xl space-y-3">
+                <h4 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase">Emergency Contact</h4>
+                <div class="grid grid-cols-2 gap-3">
+                  <div v-if="selectedAppointment.emergencyContact">
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Contact Name</p>
+                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.emergencyContact }}</p>
                   </div>
-                  <div v-if="selectedAppointment.medicalHistorySnapshot.chronicConditions">
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Chronic Conditions</p>
-                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.medicalHistorySnapshot.chronicConditions }}</p>
-                  </div>
-                  <div v-if="selectedAppointment.medicalHistorySnapshot.currentMedications">
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Current Medications</p>
-                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.medicalHistorySnapshot.currentMedications }}</p>
-                  </div>
-                  <div v-if="selectedAppointment.medicalHistorySnapshot.smokingStatus">
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Smoking Status</p>
-                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.medicalHistorySnapshot.smokingStatus }}</p>
-                  </div>
-                  <div v-if="selectedAppointment.medicalHistorySnapshot.alcoholConsumption">
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Alcohol Consumption</p>
-                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.medicalHistorySnapshot.alcoholConsumption }}</p>
+                  <div v-if="selectedAppointment.emergencyPhone">
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Contact Phone</p>
+                    <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.emergencyPhone }}</p>
                   </div>
                 </div>
               </div>
@@ -425,6 +459,32 @@ async function confirmCancel() {
                 <div v-if="selectedAppointment.notes">
                   <p class="text-xs text-neutral-500 dark:text-neutral-400">Additional Notes</p>
                   <p class="font-medium text-neutral-900 dark:text-white">{{ selectedAppointment.notes }}</p>
+                </div>
+              </div>
+
+              <!-- Medical History (dynamic) -->
+              <div v-if="selectedAppointment.medicalHistorySnapshot && Object.keys(selectedAppointment.medicalHistorySnapshot).some(k => selectedAppointment!.medicalHistorySnapshot[k])" class="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-2xl space-y-3">
+                <h4 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase">Medical History</h4>
+                <div class="space-y-2">
+                  <template v-for="(value, key) in selectedAppointment.medicalHistorySnapshot" :key="key">
+                    <div v-if="value">
+                      <p class="text-xs text-neutral-500 dark:text-neutral-400">{{ formatFieldLabel(String(key)) }}</p>
+                      <p class="font-medium text-neutral-900 dark:text-white">{{ formatFieldValue(value) }}</p>
+                    </div>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Specialty-Specific Data (dynamic) -->
+              <div v-if="selectedAppointment.specialtyFormData && Object.keys(selectedAppointment.specialtyFormData).filter(k => selectedAppointment!.specialtyFormData[k]).length > 0" class="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-2xl space-y-3">
+                <h4 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase">Specialty Details</h4>
+                <div class="space-y-2">
+                  <template v-for="(value, key) in selectedAppointment.specialtyFormData" :key="key">
+                    <div v-if="value">
+                      <p class="text-xs text-neutral-500 dark:text-neutral-400">{{ formatFieldLabel(String(key)) }}</p>
+                      <p class="font-medium text-neutral-900 dark:text-white">{{ formatFieldValue(value) }}</p>
+                    </div>
+                  </template>
                 </div>
               </div>
 

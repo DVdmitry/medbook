@@ -36,6 +36,11 @@ function mapDbAppointment(data: Record<string, unknown>, doctor?: Doctor): Appoi
     patientLastName: (data.last_name || data.patient_last_name) as string | null,
     patientEmail: (data.email || data.patient_email) as string | null,
     patientPhone: (data.phone || data.patient_phone) as string | null,
+    dateOfBirth: (data.date_of_birth || null) as string | null,
+    gender: (data.gender || null) as string | null,
+    address: (data.address || null) as string | null,
+    emergencyContact: (data.emergency_contact || null) as string | null,
+    emergencyPhone: (data.emergency_phone || null) as string | null,
     medicalHistorySnapshot: (data.medical_history || data.medical_history_snapshot || {}) as Record<string, unknown>,
     specialtyFormData: (data.specialty_form_data || {}) as Record<string, unknown>,
     cancelledAt: data.cancelled_at as string | null,
@@ -86,9 +91,10 @@ export const useAppointmentsStore = defineStore('appointments', () => {
         );
       })
       .sort((a, b) => {
-        const dateA = new Date(`${a.slotDate}T${a.slotTime}`);
-        const dateB = new Date(`${b.slotDate}T${b.slotTime}`);
-        return dateA.getTime() - dateB.getTime();
+        // Sort by createdAt descending (newest bookings first)
+        const createdA = new Date(a.createdAt).getTime();
+        const createdB = new Date(b.createdAt).getTime();
+        return createdB - createdA;
       });
   });
 
