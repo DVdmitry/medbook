@@ -104,7 +104,9 @@
       "Bash(npm run:*)",
       "Bash(npx vue-tsc:*)",
       "Bash(ps:*)",
-      "Bash(firebase functions:log:*)"
+      "Bash(firebase functions:log:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm view:*)"
     ],
     "deny": [],
     "ask": []

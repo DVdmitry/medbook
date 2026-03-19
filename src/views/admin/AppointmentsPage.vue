@@ -498,8 +498,6 @@ function clearFilters() {
       </Transition>
     </Teleport>
 
-    <!-- Typeless Form: AI voice form filling (this page only) -->
-    <typeless-form api-key="tf_3TZg2EDVDqZ-i0U3CiVw_97UtUJ3U8XV"></typeless-form>
   </div>
 </template>
 
